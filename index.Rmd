@@ -151,54 +151,71 @@ cat(readLines("github-corner.html"), sep = "\n")
 
 
 ---
-## Base R
+## Base R (1/4)
 
 
 .pull-left[
 
-- **Functions as first-class objects** – you can assign functions to variables, pass them as arguments, and return them from other functions.  
-- **Anonymous functions** – functions without names, useful for inline transformations.  
-- **Apply family** – `lapply()`, `sapply()`, `vapply()`, enable iteration without loops.  
-- **Closures / lexical scoping** – functions that capture and retain their environment, allowing reusable workflows.  
-- **Pure functions** – functions without side effects, producing predictable results.  
+**Functions as first-class objects** – you can assign functions to variables, pass them as arguments, and return them from other functions.
+
+```{r}
+# Assigning a function to a variable
+f <- sum       
+f(1:5)
+
+# Passing a function as an argument
+apply_fun <- function(x, fun) {
+  fun(x)
+}
+
+apply_fun(1:5, mean)
+```
+
+
+
 
 
 ]
 
 .pull-right[
 
+**Anonymous functions** – functions without names, useful for inline transformations.  
+
 ```{r}
-# Functions as first-class objects
-# You can assign a function to a variable and call it like any other function
-f <- sum       
-f(1:5)
-
-# Anonymous functions
-# Functions without names, useful for inline transformations
+# Anonymous functions: for inline transformations
 sapply(1:5, function(x) x^2)
-
-
-
 ```
+
+```{r}
+library(dplyr)
+
+mtcars |> 
+  mutate(hp_scaled = sapply(hp, function(x) x / max(hp))) |> 
+  select(hp, hp_scaled) |> 
+  head(n = 2)
+```
+
 
 ]
 
 
 ---
-## Base R II
+## Base R (2/4)
 
 .pull-left[
 
+**Apply family** – `lapply()`, `sapply()`, `vapply()`, enable iteration without loops. For example, sapply() applies a function to each element and simplifies the output to a vector or matrix when possible.
+
 ```{r}
-# Closures: Functions that return other functions, capturing their environment
-make_power <- function(n) {
-  function(x) x^n
-}
-square <- make_power(2)  
-square(4)
 
 # Apply family
 sapply(iris[1:4], mean)
+
+# Apply family
+mapply(sum, 1:3, 4:6)
+
+
+
 
 
 ```
@@ -208,12 +225,60 @@ sapply(iris[1:4], mean)
 
 .pull-right[
 
+**Closures / lexical scoping** – A closure is a function that captures (or “closes over”) variables from its surrounding environment — meaning it remembers the values that existed when it was created.  
+
 
 ```{r}
-# Apply family
-mapply(sum, 1:3, 4:6)
 
-# Traditional for-loop for comparison
+# A closure
+make_power <- function(n) {
+  function(x) x^n
+}
+
+square <- make_power(2)  
+square(4)
+
+```
+
+
+]
+
+
+
+---
+## Base R (3/4)
+
+.pull-left[
+
+
+**Pure functions** – functions without side effects (e.g. data export, printing), producing predictable results. Impure functions break predictability, reproducibility, testability, and parallel safety.
+
+```{r}
+# Impure function
+x <- 5
+
+add_to_x <- function(y) {
+  x <<- x + y  # modifies a global variable
+  return(x)
+}
+
+add_to_x(3)
+
+add_to_x(2)
+```
+
+
+
+
+]
+
+.pull-right[
+
+**For-loop** – repeat operations over a sequence of values.
+
+
+```{r}
+# For-loop
 squares <- numeric(5)
 
 for(i in 1:5) {
@@ -221,15 +286,61 @@ for(i in 1:5) {
 }
 squares
 
+```
+
+
+Useful for iterative tasks, but vectorized alternatives (like `sapply`) are often more concise and faster.
+
+
+
+]
+
+
+---
+## Base R (4/4)
+
+.pull-left[
+
+**Vectorization** – performing operations on entire vectors at once, avoiding explicit loops. Leads to **faster, simpler, and more readable code**.
+
+
+```{r}
+x <- 1:5
+
+# Loop version (slower)
+squares_loop <- numeric(length(x))
+for(i in seq_along(x)) {
+  squares_loop[i] <- x[i]^2
+}
+
+# Vectorized version (faster)
+squares_vec <- x^2
+squares_vec
 
 ```
 
 
 ]
 
+.pull-right[
+
+**Pipe operator (`%>%`)** – passes the output of one expression as the input to the next, enabling **clear, readable, and sequential transformations**.
 
 
 
+```{r}
+#> Make the native pipe (|>) the default
+#> Cmd + Shift + M 
+
+mtcars |> 
+  filter(cyl == 6) |> 
+  mutate(power_to_weight = hp / wt) |> 
+  summarise(avg_ptw = mean(power_to_weight))
+```
+
+Pipelines are great for creating linear, readable code, but when a single chain becomes too long or complex, it’s better to break it into smaller, named steps for clarity.
+
+]
 
 
 
@@ -264,6 +375,21 @@ background-size: 8%
 .pull-left[
 
 The heart of `purrr` is its **mapping functions**, which let you apply a function systematically across a list, vector, or multiple inputs.
+
+<div style="text-align: center;">
+  <a href="https://adv-r.hadley.nz/index.html" target="_blank">
+    <img src="https://adv-r.hadley.nz/diagrams/functionals/map.png" 
+         alt="map function: Artwork by Hadley Wickham" 
+         width="60%">
+  </a>
+  <p style="font-size: 0.8em; text-align: center;">
+    <em>Artwork: Hadley Wickham</em>
+  </p>
+</div>
+
+
+
+
 
 The `map()` function applies a function to each element of a list or vector and **always returns a list**.
 
@@ -317,37 +443,52 @@ map_chr(mtcars, class)
 background-image: url(https://purrr.tidyverse.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
-## purrr::map2 – iterating over two inputs in parallel
+## purrr::map2 – iterating over two inputs
 
 .pull-left[
 
 `map2()` is used when you want to **apply a function to two vectors or lists at the same time**, element by element. 
 
-It’s perfect for combining, comparing, or transforming two inputs together without writing explicit loops. So, `map2()` takes three main arguments:  
+<div style="text-align: center;">
+  <a href="https://adv-r.hadley.nz/index.html" target="_blank">
+    <img src="https://adv-r.hadley.nz/diagrams/functionals/map2.png" 
+         alt="map function: Artwork by Hadley Wickham" 
+         width="60%">
+  </a>
+  <p style="font-size: 0.8em; text-align: center;">
+    <em>Artwork: Hadley Wickham</em>
+  </p>
+</div>
 
+So, `map2()` takes three main arguments:  
   1. The first input vector or list (`.x`)  
   2. The second input vector or list (`.y`)  
-  3. The function to apply to each pair of elements  
-
+  3. The function to apply to each pair of elements 
 
 
 ]
 
 .pull-right[
 
+
 ```{r}
 column_names <- names(mtcars)
 column_means <- map_dbl(mtcars, mean)
 
-map2_chr(column_names, column_means, ~ paste(.x, "mean =", round(.y, 1)))
+map2result <- map2_chr(
+  column_names,
+  column_means, ~ paste(
+    .x, "mean =",
+    round(.y, 1)
+  )
+)
+map2result[1:3]
 
 ```
-]
-
-
 
 Here, `.x` refers to an element from the first vector (`column_names`), and `.y` refers to the corresponding element from the second vector (`column_means`). The tilde (`~`) creates an anonymous function, keeping the code concise.
 
+]
 
 
 ---
@@ -359,6 +500,25 @@ background-size: 8%
 .pull-left[
 
 When you have **more than two inputs**, `pmap()` generalizes this idea. It takes a **list of vectors or lists** and applies a function to corresponding elements across all inputs.
+
+<div style="text-align: center;">
+  <a href="https://adv-r.hadley.nz/index.html" target="_blank">
+    <img src="https://adv-r.hadley.nz/diagrams/functionals/pmap.png" 
+         alt="map function: Artwork by Hadley Wickham" 
+         width="60%">
+  </a>
+  <p style="font-size: 0.8em; text-align: center;">
+    <em>Artwork: Hadley Wickham</em>
+  </p>
+</div>
+
+
+
+
+
+]
+
+.pull-right[
 
 Imagine we want to combine column names, means, and standard deviations:
 
@@ -378,9 +538,15 @@ pmamp_result <- pmap(
 
 
 
+
 ]
 
-.pull-right[
+
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## purrr::pmap II
 
 ```{r}
 # Show the first 3 results of the list
@@ -389,8 +555,6 @@ pmamp_result[1:3]
 
 
 Here, `..1`, `..2`, `..3` refer to elements from the first, second, and third lists, respectively. `pmap()` allows you to work cleanly with **any number of parallel inputs**, keeping your code short and readable while avoiding nested loops.
-
-]
 
 
 
