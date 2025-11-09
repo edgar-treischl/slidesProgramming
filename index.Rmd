@@ -131,9 +131,9 @@ cat(readLines("github-corner.html"), sep = "\n")
 .pull-left[
 
 
-### 01 Develop 
-### 02 Build 
-### 03 Document 
+### 01 Base R 
+### 02 Purrr 
+### 03 rlang 
 ### 04 Deploy
 
 
@@ -146,6 +146,63 @@ cat(readLines("github-corner.html"), sep = "\n")
 
 
 ]
+
+
+---
+## R Basic
+
+.pull-left[
+
+
+- Data Exploration
+  - `head/tail(x)` – view first/last rows  
+  - `str(x)` – structure of an object  
+  - `names(x)` – column or element names
+
+- Indexing and Subsetting
+  - `x[i]` – subset vector  
+  - `x[i, j]` – subset matrix/data.frame  
+  - `x[condition]` – logical indexing  
+  - `subset(x, condition)` – filter rows
+
+- Vector & Sequence Operations
+  - `c()` – combine values into a vector  
+  - `seq()`, `rep()` – generate sequences/repeats  
+  - `sort(x)` – sort a vector  
+  - `rev(x)` – reverse elements
+
+
+
+
+]
+
+.pull-right[
+
+- Basic Math & Statistics
+  - `sum(x)`, `prod(x)` – sum/product  
+  - `mean(x)`, `median(x)`, `var(x)`, `sd(x)` – statistics
+  ...
+
+- Logical & Comparison
+  - `==`, `!=`, `<`, `>`, `<=`, `>=` – comparisons  
+  - `&`, `|`, `!` – logical AND, OR, NOT  
+  - `any()`, `all()` – check logical conditions over vectors
+
+- Object Manipulation
+  - `cbind()`, `rbind()` – combine matrices or data frames  
+  - `merge()` – join data frames  
+  - `dimnames()` – get/set row/column names  
+  - `replicate()` – repeat expressions
+
+
+]
+
+
+
+
+
+
+
 
 
 
@@ -555,6 +612,287 @@ pmamp_result[1:3]
 
 
 Here, `..1`, `..2`, `..3` refer to elements from the first, second, and third lists, respectively. `pmap()` allows you to work cleanly with **any number of parallel inputs**, keeping your code short and readable while avoiding nested loops.
+
+---
+## Example: Reading and Cleaning Data
+
+
+Imagine, a folder full of CSV files, all with the same structure, and we need to import them and clean the column names.
+
+.pull-left[
+
+
+=> The manual Approach:
+
+```{r, eval=FALSE}
+df1 <- read.csv("df1.csv")
+df1 <- janitor::clean_names(df1)
+...
+df101 <- read.csv("df101.csv")
+```
+
+
+Solving this task manually quickly becomes tedious and error-prone. 
+
+
+
+
+]
+
+.pull-right[
+
+=> The Loop
+
+```{r}
+files <- list.files("data", pattern = "*.csv", full.names = TRUE)
+dfs <- list()
+
+for (i in seq_along(files)) {
+  df <- read.csv(files[i])
+  df <- janitor::clean_names(df)
+  dfs[[i]] <- df
+}
+```
+
+
+
+]
+
+The loop works, is better a manual approch, but there are some downsides:
+- You have to manually manage the **index** `i` and the `dfs` list.
+- The code is **verbose**, with variables that can clutter your workspace.
+- It’s **less composable**, making it harder to fit into a pipe-based workflow or reuse as a function.
+
+
+---
+## Example: Reading and Cleaning Data
+
+Function programming with purrr is often cleaner, safer, and easier to maintain: 
+
+.pull-left[
+
+- **No manual indexing** — `map()` takes care of iterating over each file automatically. No need to track `i` or worry about list positions.  
+- **Clean and readable** — the workflow reads top-down: read the file, clean the names, done. No clutter from intermediate variables.  
+- **Predictable and type-safe** — `map()` always returns a list, so `dfs` is consistent and reliable.  
+- **Easily reusable** — wrap this logic in a function, and you can apply it to any folder of files without rewriting the loop.
+
+
+
+
+
+]
+
+.pull-right[
+
+Hallo purrr
+
+
+```{r, eval=FALSE}
+library(purrr)
+library(janitor)
+
+files <- list.files("data", pattern = "*.csv", full.names = TRUE)
+
+dfs <- files |>
+  map(read.csv) |>
+  map(clean_names)
+```
+
+
+
+]
+
+
+---
+## Example: Creating Multiple Plots
+
+
+.pull-left[
+
+- `imap()` iterates over both the **values** and **names** of each column in `mtcars`.  
+- For every column (`.x`), it checks if it’s numeric using `is.numeric(.x)`.  
+- If it is, a `ggplot` histogram is created.
+- The column name (`.y`) is used dynamically in the plot title.  
+- All resulting plots are stored neatly in a **list object** called `plots`, ready for display or export.
+
+
+]
+
+.pull-right[
+
+
+```{r}
+library(ggplot2)
+library(purrr)
+
+# Create a histogram for each numeric column
+plots <- imap(mtcars, ~ {
+  if(is.numeric(.x)) {
+    ggplot(mtcars, aes(x = .x)) +
+      geom_histogram(bins = 10, fill = "steelblue") +
+      ggtitle(paste("Histogram of", .y))
+  }
+})
+
+# A list of plots
+class(plots)
+
+
+```
+
+
+
+]
+
+When iterating over many elements, not every operation will go smoothly — some columns might be non-numeric, a plot might fail to render, or a transformation could throw an error.
+
+
+---
+## safely
+
+.pull-left[
+
+`safely()` **catches errors** and returns them as part of the output, rather than halting execution. It transforms a function that always returns a **list** with two elements:
+
+- `result`: the output (or `NULL` if an error occurred)  
+- `error`: the error message (or `NULL` if everything worked)
+
+
+```{r, warning=TRUE, error = TRUE}
+# Some test inputs
+data_list <- list(
+  c("a", "b", "c"),
+  c(1, 2, 3)
+)
+
+mean(data_list[[1]])
+```
+
+
+
+]
+
+.pull-right[
+
+With purrr
+
+```{r}
+# Wrap mean() safely
+safe_mean <- safely(mean)
+
+# Apply safely-wrapped mean() to each element
+results <- map(data_list, safe_mean)
+
+# Extract via map
+numeric_results <- map(results, "result")
+errors <- map(results, "error")
+
+# Keep only successful numeric results and simplify to a vector
+flatten_dbl(compact(numeric_results))
+
+
+
+```
+
+
+
+
+]
+
+
+---
+## walk()
+
+
+.pull-left[
+
+- The `walk()` function is perfect for operations that have **side effects**, such as saving files, printing messages, or generating plots. 
+
+- It behaves just like `map()`, but it **returns nothing**, keeping your workflow clean when you only care about the action being performed.
+
+- Plus: The `.progress = TRUE` option automatically shows a progress bar while mapping, which is invaluable for long-running tasks.
+
+
+]
+
+.pull-right[
+
+For example, after creating your list of plots, you can easily export them all at once:
+
+```{r, eval=FALSE}
+library(purrr)
+library(ggplot2)
+
+# Save each plot to file
+walk(names(plots), ~ {
+  ggsave(
+    filename = paste0(.x, "_plot.png"),
+    plot = plots[[.x]],
+    width = 6,
+    height = 4
+  )
+})
+
+```
+
+
+
+
+]
+
+
+---
+## Parallel Processing
+
+
+.pull-left[
+
+- When performance is important — say you’re generating hundreds of plots or running computationally‑heavy tasks — the parallel capabilities of `purrr` come into play. 
+
+- Starting with version 1.2.0, `purrr` supports parallel execution via the `in_parallel()` “adverb”.
+
+- Parallelism can significantly speed up operations by distributing tasks across multiple CPU cores. The latter is also a advanced topic which is why we only touch it briefly here.
+
+```{r, eval=FALSE}
+# Prepare inputs
+column_names <- names(mtcars)
+column_data  <- mtcars
+# Ensure daemons are running
+mirai::daemons(4)
+mirai::require_daemons()
+```
+
+
+
+]
+
+.pull-right[
+
+- We can export the list of plots in parallel:
+
+```{r, eval=FALSE}
+# Export histograms in parallel
+plots_parallel <- map2(
+  column_names, column_data,
+  ~ in_parallel(
+      \(col_name, data) {
+        ggplot2::ggplot(data, ggplot2::aes(x = .data[[col_name]])) +
+          ggplot2::geom_histogram(bins = 10, fill = "steelblue") +
+          ggplot2::ggtitle(paste("Histogram of", col_name))
+      },
+      col_name  = .x,
+      data      = .y
+    )
+)
+```
+
+
+
+
+]
+
+
+
 
 
 
