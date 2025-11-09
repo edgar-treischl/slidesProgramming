@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Bangers&display=swap');
+
+.remark-code, .remark-inline-code {
+  max-width: 100%;
+  overflow-x: auto;
+  font-size: 0.9em;
+}
+
+.remark-code-line {
+  white-space: pre-wrap;
+}
+
+/* styles.css */
+/* styles.css */
+
+/* Create a nice looking info box with emoji */
+.info-box {
+  border: 2px solid #darkblue;  /* Blue border for clarity */
+  background-color: #E7F4FF;  /* Light blue background for a calm, clear look */
+  padding: 20px;              /* Padding around the content */
+  margin: 20px 0;             /* Margin to separate the box from other content */
+  border-radius: 10px;        /* Rounded corners for a modern look */
+  font-family: "Montserrat", sans-serif;  /* Clean font */
+  font-size: 1.1em;           /* Slightly larger text for readability */
+  color: #333;                /* Dark text color for contrast */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
+  display: flex;
+  align-items: center;        /* Vertically align the emoji and text */
+  max-width: 90%;
+}
+
+.info-box i {
+  margin-right: 15px;         /* Space between the emoji and the text */
+  font-size: 1.5em;           /* Slightly larger emoji for visibility */
+  color: #lightblue;             /* Emoji color matching the box border */
+}
+
+/* Optional: Style blockquotes with the same class */
+blockquote.info-box {
+  font-style: italic;         /* Italicize the text for emphasis */
+  border-left: 4px solid #007BFF;  /* Blue left border for blockquotes */
+  padding-left: 15px;         /* Padding for the blockquote */
+}
+
+
+:root {
+  /* Fonts */
+  --text-font-family: Montserrat;
+  --text-font-is-google: 1;
+  --text-font-family-fallback: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Ubuntu, roboto, noto, segoe ui, arial;
+  --text-font-base: sans-serif;
+  --header-font-family: Lato;
+  --header-font-is-google: 1;
+  --header-font-family-fallback: Georgia, serif;
+  --code-font-family: 'Fira Code';
+  --code-font-is-google: 1;
+  --base-font-size: 20px;
+  --text-font-size: 1rem;
+  --code-font-size: 0.9rem;
+  --code-inline-font-size: 1em;
+  --header-h1-font-size: 2.75rem;
+  --header-h2-font-size: 2.25rem;
+  --header-h3-font-size: 1.75rem;
+
+  /* Colors */
+  --text-color: #272822;
+  --header-color: black;
+  --background-color: #FFFFFF;
+  --link-color: black;
+  --text-bold-color: black;
+  --code-highlight-color: rgba(255,255,0,0.5);
+  --inverse-text-color: #FFFFFF;
+  --inverse-background-color: black;
+  --inverse-header-color: #FFFFFF;
+  --inverse-link-color: black;
+  --title-slide-background-color: black;
+  --title-slide-text-color: #FFFFFF;
+  --header-background-color: black;
+  --header-background-text-color: #FFFFFF;
+  --base: black;
+  --white: #FFFFFF;
+  --black: #272822;
+  --red: #c1121f;
+}
+
+
+.red {
+  color: var(--red);
+}
+
+/* Style for the footer section */
+.remark-footer {
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between; /* This will position items to the left and right */
+  align-items: center;  /* This ensures vertical centering */
+  padding: 0 10px;  /* Add padding if necessary */
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.5em;
+}
+
+
+
+/* Left-aligned image */
+.footer-left {
+  margin-right: auto;  /* Pushes it to the left */
+  width: 150px;  /* Set size or adjust as needed */
+}
+
+/* Right-aligned image */
+.footer-right {
+  width: 50px;  /* Adjust width for GitHub logo */
+  height: auto;
+}
+
+
+

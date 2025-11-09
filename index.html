@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>R Programming</title>
+    <meta charset="utf-8" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
+    <script src="libs/xaringanExtra-progressBar/progress-bar.js"></script>
+    <link href="libs/panelset/panelset.css" rel="stylesheet" />
+    <script src="libs/panelset/panelset.js"></script>
+    <script src="libs/clipboard/clipboard.min.js"></script>
+    <link href="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="libs/xaringanExtra-clipboard/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
+    <link href="libs/tile-view/tile-view.css" rel="stylesheet" />
+    <script src="libs/tile-view/tile-view.js"></script>
+    <meta name="description" content="Slides: R Programming"/>
+    <meta name="generator" content="xaringan and remark.js"/>
+    <meta name="github-repo" content="edgar-treischl/slidesRinProduction"/>
+    <meta name="twitter:title" content="R Programming"/>
+    <meta name="twitter:description" content="Slides: R Programming"/>
+    <meta name="twitter:url" content="https://edgar-treischl.github.io/slidesRinProduction/"/>
+    <meta name="twitter:image" content="https://edgar-treischl.github.io/slidesRinProduction&#10;/images/preview.png"/>
+    <meta name="twitter:image:alt" content="Title Slide"/>
+    <meta name="twitter:card" content="summary"/>
+    <meta property="og:title" content="R Programming"/>
+    <meta property="og:description" content="Slides: R Programming"/>
+    <meta property="og:url" content="https://edgar-treischl.github.io/slidesRinProduction/"/>
+    <meta property="og:image" content="https://edgar-treischl.github.io/slidesRinProduction&#10;/images/preview.png"/>
+    <meta property="og:image:alt" content="Title Slide"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:locale" content="en_US"/>
+    <meta property="article:author" content="Edgar J. Treischl"/>
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+    <link rel="stylesheet" href="styles.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+
+
+background-image: url("images/bg_web.png")
+background-size: cover
+class: left, bottom
+
+
+
+
+
+<style>.xe__progress-bar__container {
+  top:0;
+  opacity: 1;
+  position:absolute;
+  right:0;
+  left: 0;
+}
+.xe__progress-bar {
+  height: 0.25em;
+  background-color: #023047;
+  width: calc(var(--slide-current) / var(--slide-total) * 100%);
+}
+.remark-visible .xe__progress-bar {
+  animation: xe__progress-bar__wipe 200ms forwards;
+  animation-timing-function: cubic-bezier(.86,0,.07,1);
+}
+@keyframes xe__progress-bar__wipe {
+  0% { width: calc(var(--slide-previous) / var(--slide-total) * 100%); }
+  100% { width: calc(var(--slide-current) / var(--slide-total) * 100%); }
+}</style>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+&lt;a href="https://github.com/edgar-treischl/slidesRPackages" class="github-corner" aria-label="View source on GitHub"&gt;&lt;svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"&gt;&lt;path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/&gt;&lt;path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/&gt;&lt;path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/&gt;&lt;/svg&gt;&lt;/a&gt;&lt;style&gt;.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}&lt;/style&gt;
+
+
+&lt;h1 style="font-family: 'Bangers', sans-serif; font-size: 65px; color: #ffff;"&gt;R Programming&lt;/h1&gt;
+&lt;br/&gt;
+
+&lt;h3&gt;&lt;a href="http://www.edgar-treischl.de" target="_blank" style="color:#C51717;"&gt;Dr. Edgar J. Treischl&lt;/a&gt;&lt;/h3&gt;
+
+
+&lt;br/&gt;
+.white[Last update: 2025-11-09]
+&lt;br/&gt;
+&lt;h4 style = "color:#ffff; text-align: right;"&gt;Press ⭕ or ➡️&lt;/h4&gt;
+
+
+&lt;div class="remark-footer"&gt;&lt;a href="https://unsplash.com/de/@sajjadahmadi" target="_blank" style="color: gray;"&gt;Images: Sajjad Ahmadi&lt;/a&gt;&lt;/div&gt;
+
+
+
+
+&lt;style type="text/css"&gt;
+.reduced_opacity {
+  opacity: 0.5;
+}
+&lt;/style&gt;
+
+
+---
+## Agenda
+
+
+
+
+.pull-left[
+
+
+### 01 Develop 
+### 02 Build 
+### 03 Document 
+### 04 Deploy
+
+
+
+
+
+]
+
+.pull-right[
+
+
+]
+
+
+
+
+
+
+
+---
+## 01: Why R Packages?
+
+### I will not create something like ggplot2, so why should I create a package anyway? 😳 
+
+.pull-left[
+
+- *Reusability and Distribution*: Make sure everything needed to run is available. Plus: simplifies version control, dependency management, and installation.
+- *Organization and Maintainability*: A package encourages a clean and organized code, making it easier to maintain, update, and extend over time.
+
+- *Documentation*: A package allows to include automatic documentation (help files, website, vignettes) , making it much easier for others - and the future yourself - to understand how it works.
+
+- 🦜 Further Goodies
+
+
+]
+
+.pull-right[
+&lt;figure&gt;
+    &lt;a href="https://r-pkgs.org" target="_blank"&gt;&lt;img src="https://r-pkgs.org/images/cover-2e-small.png" alt="www.edgar-treischl.de" width="65%"/&gt;
+    &lt;/a&gt;
+&lt;/figure&gt;
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+class: center, middle
+
+.left-column[
+
+## Keep in touch
+
+#### &lt;a href="https://edgar-treischl.de" target="_blank"&gt;&lt;img src="https://avatars.githubusercontent.com/u/77931249?s=400&amp;u=eaf1d0871b643dd32cc0ff9f777edef28e6569a8&amp;v=4" alt="www.edgar-treischl.de" width="25%"/&gt;&lt;br/&gt;www.edgar-treischl.de&lt;/a&gt;
+&lt;br/&gt;
+
+#### &lt;a href="https://github.com/edgar-treischl/Workshop_reproducibleR" target="_blank"&gt;&lt;img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" alt="https://github.com/edgar-treischl" width="30%"/&gt;&lt;br/&gt;edgar-treischl&lt;/a&gt;
+
+
+]
+
+.right-column[
+&lt;br&gt;
+&lt;br&gt;
+## Thank you for your attention!
+
+
+]
+
+
+
+
+
+
+
+---
+
+## References (1/2)
+
+
+&lt;p&gt;&lt;cite&gt;Hester, J.
+(2023).
+&lt;em&gt;covr: Test Coverage for Packages&lt;/em&gt;.
+URL: &lt;a href="https://CRAN.R-project.org/package=covr"&gt;https://CRAN.R-project.org/package=covr&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
+&lt;p&gt;&lt;cite&gt;Hester, J., F. Angly, R. Hyde, et al.
+(2024).
+&lt;em&gt;lintr: A 'Linter' for R Code&lt;/em&gt;.
+URL: &lt;a href="https://CRAN.R-project.org/package=lintr"&gt;https://CRAN.R-project.org/package=lintr&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
+&lt;p&gt;&lt;cite&gt;Müller, K.
+(2020).
+&lt;em&gt;here: A Simpler Way to Find Your Files&lt;/em&gt;.
+R package version 1.0.1.
+URL: &lt;a href="https://CRAN.R-project.org/package=here"&gt;https://CRAN.R-project.org/package=here&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
+&lt;p&gt;&lt;cite&gt;Müller, K. and L. Walthert
+(2024).
+&lt;em&gt;styler: Non-Invasive Pretty Printing of R Code&lt;/em&gt;.
+URL: &lt;a href="https://CRAN.R-project.org/package=styler"&gt;https://CRAN.R-project.org/package=styler&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
+&lt;p&gt;&lt;cite&gt;Ushey, K. and H. Wickham
+(2024).
+&lt;em&gt;renv: Project Environments&lt;/em&gt;.
+URL: &lt;a href="https://CRAN.R-project.org/package=renv"&gt;https://CRAN.R-project.org/package=renv&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
+&lt;p&gt;&lt;cite&gt;Wickham, H.
+(2023).
+&lt;em&gt;R Packages: Organize, Test, Document, and Share Your Code&lt;/em&gt;.
+Sebastopol, CA: O'Reilly.
+URL: &lt;a href="https://r-pkgs.org"&gt;https://r-pkgs.org&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
+&lt;p&gt;&lt;cite&gt;Wickham, H.
+(2011).
+&amp;ldquo;testthat: Get Started with Testing&amp;rdquo;.
+In: &lt;em&gt;The R Journal&lt;/em&gt; 3, pp. 5&amp;ndash;10.
+URL: &lt;a href="https://journal.r-project.org/archive/2011-1/RJournal_2011-1_Wickham.pdf"&gt;https://journal.r-project.org/archive/2011-1/RJournal_2011-1_Wickham.pdf&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
+&lt;p&gt;&lt;cite&gt;Wickham, H., J. Bryan, and M. Barrett
+(2024).
+&lt;em&gt;usethis: Automate Package and Project Setup&lt;/em&gt;.
+URL: &lt;a href="https://CRAN.R-project.org/package=usethis"&gt;https://CRAN.R-project.org/package=usethis&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
+
+
+
+
+---
+
+## References (2/2)
+
+
+&lt;p&gt;&lt;cite&gt;Wickham, H., W. Chang, R. Flight, et al.
+(2021).
+&lt;em&gt;sessioninfo: R Session Information&lt;/em&gt;.
+R package version 1.2.2.
+URL: &lt;a href="https://CRAN.R-project.org/package=sessioninfo"&gt;https://CRAN.R-project.org/package=sessioninfo&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
+&lt;p&gt;&lt;cite&gt;Wickham, H., P. Danenberg, G. Csárdi, et al.
+(2024).
+&lt;em&gt;roxygen2: In-Line Documentation for R&lt;/em&gt;.
+URL: &lt;a href="https://CRAN.R-project.org/package=roxygen2"&gt;https://CRAN.R-project.org/package=roxygen2&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
+&lt;p&gt;&lt;cite&gt;Wickham, H., J. Hesselberth, M. Salmon, et al.
+(2024).
+&lt;em&gt;pkgdown: Make Static HTML Documentation for a Package&lt;/em&gt;.
+URL: &lt;a href="https://CRAN.R-project.org/package=pkgdown"&gt;https://CRAN.R-project.org/package=pkgdown&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
+&lt;p&gt;&lt;cite&gt;Wickham, H., J. Hester, W. Chang, et al.
+(2022).
+&lt;em&gt;devtools: Tools to Make Developing R Packages Easier&lt;/em&gt;.
+R package version 2.4.5.
+URL: &lt;a href="https://CRAN.R-project.org/package=devtools"&gt;https://CRAN.R-project.org/package=devtools&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
+&lt;p&gt;&lt;cite&gt;Xie, Y.
+(2024).
+&lt;em&gt;knitr: A General-Purpose Package for Dynamic Report Generation in R&lt;/em&gt;.
+URL: &lt;a href="https://CRAN.R-project.org/package=knitr"&gt;https://CRAN.R-project.org/package=knitr&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+  "ratio": "16:9",
+  "highlightStyle": "github",
+  "highlightLines": true,
+  "countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

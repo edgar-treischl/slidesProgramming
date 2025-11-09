@@ -1,0 +1,365 @@
+---
+title: "R Programming"
+date: "Last update: `r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: ["xaringan-themer.css", "styles.css"] 
+    seal: false
+    #chakra: libs/remark-latest.min.js
+    lib_dir: libs
+    nature:
+      ratio: '16:9'
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+      titleSlideClass: [center, middle]
+---
+
+background-image: url("images/bg_web.png")
+background-size: cover
+class: left, bottom
+
+
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+
+library(ggplot2)
+library(tidyverse)
+library(readr)
+library(gridExtra)
+library(cowplot)
+
+#library(jtools)
+
+
+knitr::opts_chunk$set(fig.retina = 3, 
+                      warning = FALSE, 
+                      message = FALSE)
+
+
+
+theme_set(theme_minimal(base_size = 20)) # sets a default ggplot theme
+
+#has_bash <- Sys.which('bash') != '' && .Platform$OS.type != 'windows'
+
+library(RefManageR)
+bib <- ReadBib("PracticeR_FINAL.bib", check = FALSE)
+ui <- "- "
+```
+
+```{r best-features, echo=FALSE}
+#search
+#xaringanExtra::use_search(show_icon = TRUE, position = "top-right")
+
+xaringanExtra::use_progress_bar(color = "#023047", location = "top")
+xaringanExtra::use_panelset()
+xaringanExtra::use_clipboard()
+xaringanExtra::use_tile_view()
+
+```
+
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "black",
+  header_font_google = google_font("Commissioner"),
+  text_font_google   = google_font("EB Garamond"),
+  code_font_google   = google_font("Fira Code")
+)
+
+```
+
+
+
+
+
+
+
+
+
+  
+
+```{r meta, echo=FALSE}
+library(metathis)
+meta() %>%
+  meta_general(
+    description = "Slides: R Programming",
+    generator = "xaringan and remark.js"
+  ) %>% 
+  meta_name("github-repo" = "edgar-treischl/slidesRinProduction") %>% 
+  meta_social(
+    title = "R Programming",
+    url = "https://edgar-treischl.github.io/slidesRinProduction/",
+    og_type = "website",
+    og_author = "Edgar J. Treischl",
+    image = "https://edgar-treischl.github.io/slidesRinProduction
+/images/preview.png",
+    image_alt = "Title Slide"
+  )
+```
+
+
+```{r, results='asis', echo=FALSE}
+cat(readLines("github-corner.html"), sep = "\n")
+```
+
+
+<h1 style="font-family: 'Bangers', sans-serif; font-size: 65px; color: #ffff;">R Programming</h1>
+<br/>
+
+<h3><a href="http://www.edgar-treischl.de" target="_blank" style="color:#C51717;">Dr. Edgar J. Treischl</a></h3>
+
+
+<br/>
+.white[Last update: `r Sys.Date()`]
+<br/>
+<h4 style = "color:#ffff; text-align: right;">Press `r emoji::emoji("o")` or `r emoji::emoji("arrow_right")`</h4>
+
+
+<div class="remark-footer"><a href="https://unsplash.com/de/@sajjadahmadi" target="_blank" style="color: gray;">Images: Sajjad Ahmadi</a></div>
+
+
+
+
+```{css, echo = F}
+.reduced_opacity {
+  opacity: 0.5;
+}
+```
+
+
+---
+## Agenda
+
+
+
+
+.pull-left[
+
+
+### 01 Develop 
+### 02 Build 
+### 03 Document 
+### 04 Deploy
+
+
+
+
+
+]
+
+.pull-right[
+
+
+]
+
+
+
+
+
+
+
+---
+## 01: Why R Packages?
+
+### I will not create something like ggplot2, so why should I create a package anyway? `r emoji::emoji("crazy")` 
+
+.pull-left[
+
+- *Reusability and Distribution*: Make sure everything needed to run is available. Plus: simplifies version control, dependency management, and installation.
+- *Organization and Maintainability*: A package encourages a clean and organized code, making it easier to maintain, update, and extend over time.
+
+- *Documentation*: A package allows to include automatic documentation (help files, website, vignettes) , making it much easier for others - and the future yourself - to understand how it works.
+
+- `r emoji::emoji("parrot")` Further Goodies
+
+
+]
+
+.pull-right[
+<figure>
+    <a href="https://r-pkgs.org" target="_blank"><img src="https://r-pkgs.org/images/cover-2e-small.png" alt="www.edgar-treischl.de" width="65%"/>
+    </a>
+</figure>
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+class: center, middle
+
+.left-column[
+
+## Keep in touch
+
+#### <a href="https://edgar-treischl.de" target="_blank"><img src="https://avatars.githubusercontent.com/u/77931249?s=400&u=eaf1d0871b643dd32cc0ff9f777edef28e6569a8&v=4" alt="www.edgar-treischl.de" width="25%"/><br/>www.edgar-treischl.de</a>
+<br/>
+
+#### <a href="https://github.com/edgar-treischl/Workshop_reproducibleR" target="_blank"><img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" alt="https://github.com/edgar-treischl" width="30%"/><br/>edgar-treischl</a>
+
+
+]
+
+.right-column[
+<br>
+<br>
+## Thank you for your attention!
+
+
+]
+
+
+
+
+
+
+
+---
+
+## References (1/2)
+
+
+```{r, print_refs, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
+
+print(bib[key = "covr"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+
+print(bib[key = "lintr"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+
+print(bib[key = "here"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+
+print(bib[key = "styler"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+
+print(bib[key = "renv"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+
+
+print(bib[key = "wickham_r_2015"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+
+print(bib[key = "testthat"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+
+print(bib[key = "usethis"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+
+```
+
+
+
+
+---
+
+## References (2/2)
+
+
+```{r, print_refs2, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
+
+print(bib[key = "sessioninfo"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+
+print(bib[key = "roxygen2"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+
+print(bib[key = "pkgdown"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+
+print(bib[key = "devtools"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+
+print(bib[key = "knitr"], 
+  .opts = list(check.entries = FALSE, 
+               style = "html", 
+               bib.style = "authoryear"))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
