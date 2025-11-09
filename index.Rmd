@@ -73,14 +73,6 @@ style_mono_accent(
 
 
 
-
-
-
-
-
-
-  
-
 ```{r meta, echo=FALSE}
 library(metathis)
 meta() %>%
@@ -158,208 +150,278 @@ cat(readLines("github-corner.html"), sep = "\n")
 
 
 
+---
+## Base R
+
+
+.pull-left[
+
+- **Functions as first-class objects** – you can assign functions to variables, pass them as arguments, and return them from other functions.  
+- **Anonymous functions** – functions without names, useful for inline transformations.  
+- **Apply family** – `lapply()`, `sapply()`, `vapply()`, enable iteration without loops.  
+- **Closures / lexical scoping** – functions that capture and retain their environment, allowing reusable workflows.  
+- **Pure functions** – functions without side effects, producing predictable results.  
+
+
+]
+
+.pull-right[
+
+```{r}
+# Functions as first-class objects
+# You can assign a function to a variable and call it like any other function
+f <- sum       
+f(1:5)
+
+# Anonymous functions
+# Functions without names, useful for inline transformations
+sapply(1:5, function(x) x^2)
+
+
+
+```
+
+]
+
+
+---
+## Base R II
+
+.pull-left[
+
+```{r}
+# Closures: Functions that return other functions, capturing their environment
+make_power <- function(n) {
+  function(x) x^n
+}
+square <- make_power(2)  
+square(4)
+
+# Apply family
+sapply(iris[1:4], mean)
+
+
+```
+
+
+]
+
+.pull-right[
+
+
+```{r}
+# Apply family
+mapply(sum, 1:3, 4:6)
+
+# Traditional for-loop for comparison
+squares <- numeric(5)
+
+for(i in 1:5) {
+  squares[i] <- i^2
+}
+squares
+
+
+```
+
+
+]
+
+
+
+
+
+
 
 
 
 ---
-## 01: Why R Packages?
-
-### I will not create something like ggplot2, so why should I create a package anyway? `r emoji::emoji("crazy")` 
+## Hello Purrr
 
 .pull-left[
 
-- *Reusability and Distribution*: Make sure everything needed to run is available. Plus: simplifies version control, dependency management, and installation.
-- *Organization and Maintainability*: A package encourages a clean and organized code, making it easier to maintain, update, and extend over time.
-
-- *Documentation*: A package allows to include automatic documentation (help files, website, vignettes) , making it much easier for others - and the future yourself - to understand how it works.
-
-- `r emoji::emoji("parrot")` Further Goodies
+<div class="info-box">
+  <i>`r emoji::emoji("parrot")`</i> The purrr package helps you avoid repetitive code (Wickham and Henry 2025). The package is part of the tidyverse and provides a consistent, readable way to perform iteration in R. Instead of writing loops or repeating function calls manually, purrr lets you apply functions over lists, vectors, or data frames using a family of tools like map, map2, and pmap.
+</div>
 
 
 ]
 
 .pull-right[
 <figure>
-    <a href="https://r-pkgs.org" target="_blank"><img src="https://r-pkgs.org/images/cover-2e-small.png" alt="www.edgar-treischl.de" width="65%"/>
+    <a href="https://purrr.tidyverse.org" target="_blank"><img src="https://purrr.tidyverse.org/logo.png" alt="purrr.tidyverse.org" width="55%" align="center"/>
     </a>
 </figure>
 ]
 
 
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## purrr::map
+
+.pull-left[
+
+The heart of `purrr` is its **mapping functions**, which let you apply a function systematically across a list, vector, or multiple inputs.
+
+The `map()` function applies a function to each element of a list or vector and **always returns a list**.
+
+]
+
+.pull-right[
+```{r}
+# Create a list of numeric vectors
+num_list <- list(a = 1:5, 
+                 b = 6:10, 
+                 c = 11:15)
+
+# Use map() to calculate the mean of each vector
+map(num_list, mean)
+
+```
+]
+
+
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## purrr::map
+
+.pull-left[
+
+Each result is a list element, keeping the structure consistent. If you want a specific type of output, `purrr` provides **type-specific variants** that guarantee the output type, making your code more predictable and reducing subtle bugs.
+
+- `map_dbl()` – returns a numeric vector
+- `map_chr()` – returns a character vector
+- `map_int()` – returns an integer vector
+- `map_lgl()` – returns a logical vector
+- `map_df()` – returns a data frame
+
+
+]
+
+.pull-right[
+
+```{r}
+# Using type-specific variants
+map_df(mtcars, mean)
+map_chr(mtcars, class)
+
+```
+]
+
+
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## purrr::map2 – iterating over two inputs in parallel
+
+.pull-left[
+
+`map2()` is used when you want to **apply a function to two vectors or lists at the same time**, element by element. 
+
+It’s perfect for combining, comparing, or transforming two inputs together without writing explicit loops. So, `map2()` takes three main arguments:  
+
+  1. The first input vector or list (`.x`)  
+  2. The second input vector or list (`.y`)  
+  3. The function to apply to each pair of elements  
 
 
 
+]
+
+.pull-right[
+
+```{r}
+column_names <- names(mtcars)
+column_means <- map_dbl(mtcars, mean)
+
+map2_chr(column_names, column_means, ~ paste(.x, "mean =", round(.y, 1)))
+
+```
+]
 
 
 
+Here, `.x` refers to an element from the first vector (`column_names`), and `.y` refers to the corresponding element from the second vector (`column_means`). The tilde (`~`) creates an anonymous function, keeping the code concise.
 
 
 
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## purrr::pmap – iterating over multiple inputs
+
+.pull-left[
+
+When you have **more than two inputs**, `pmap()` generalizes this idea. It takes a **list of vectors or lists** and applies a function to corresponding elements across all inputs.
+
+Imagine we want to combine column names, means, and standard deviations:
+
+```{r}
+column_sds <- map_dbl(mtcars, sd)
+inputs <- list(column_names, column_means, column_sds)
+
+pmamp_result <- pmap(
+  inputs,
+  ~ paste(
+    ..1, " with a mean =", round(..2, 1),
+    " and a sd =", round(..3, 1)
+  )
+)
+
+```
 
 
 
+]
+
+.pull-right[
+
+```{r}
+# Show the first 3 results of the list
+pmamp_result[1:3]
+```
 
 
+Here, `..1`, `..2`, `..3` refer to elements from the first, second, and third lists, respectively. `pmap()` allows you to work cleanly with **any number of parallel inputs**, keeping your code short and readable while avoiding nested loops.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+]
 
 
 
 
 ---
-class: center, middle
-
-.left-column[
-
-## Keep in touch
-
-#### <a href="https://edgar-treischl.de" target="_blank"><img src="https://avatars.githubusercontent.com/u/77931249?s=400&u=eaf1d0871b643dd32cc0ff9f777edef28e6569a8&v=4" alt="www.edgar-treischl.de" width="25%"/><br/>www.edgar-treischl.de</a>
-<br/>
-
-#### <a href="https://github.com/edgar-treischl/Workshop_reproducibleR" target="_blank"><img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" alt="https://github.com/edgar-treischl" width="30%"/><br/>edgar-treischl</a>
+class: right, middle
 
 
-]
-
-.right-column[
-<br>
-<br>
 ## Thank you for your attention!
 
 
-]
+<img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/77931249?s=400&u=eaf1d0871b643dd32cc0ff9f777edef28e6569a8&v=4" width="150px"/>
 
 
 
+[`r icons::fontawesome("rocket")` www.edgar-treischl.de](https://www.edgar-treischl.de)
 
+[`r icons::fontawesome("github")` edgar-treischl](https://github.com/edgar-treischl)
 
-
-
----
-
-## References (1/2)
-
-
-```{r, print_refs, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
-
-print(bib[key = "covr"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "lintr"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "here"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "styler"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "renv"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-
-print(bib[key = "wickham_r_2015"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "testthat"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "usethis"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-```
-
-
+[`r icons::fontawesome("envelope")` edgar.treischl@isb.bayern.de](mailto:edgar.treischl@isb.bayern.de)
 
 
 ---
-
-## References (2/2)
-
-
-```{r, print_refs2, results='asis', echo=FALSE, warning=FALSE, message=FALSE}
-
-print(bib[key = "sessioninfo"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "roxygen2"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "pkgdown"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "devtools"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-print(bib[key = "knitr"], 
-  .opts = list(check.entries = FALSE, 
-               style = "html", 
-               bib.style = "authoryear"))
-
-```
+class: right, middle
 
 
 
+## Licence
 
-
-
-
-
-
-
-
-
-
-
+This presentation is licensed under a CC-BY-NC 4.0 license.
+You may copy, distribute, and use the slides in your own work, as long as you give attribution to the original author on each slide that you use. Commercial use of the contents of these slides is not allowed.
+<br/>
+<br/>
+<img src="images/by-nceu.png" alt="Image left" width="150px"/>

@@ -74,14 +74,6 @@ class: left, bottom
 
 
 
-
-
-
-  
-
-
-
-
 &lt;a href="https://github.com/edgar-treischl/slidesRPackages" class="github-corner" aria-label="View source on GitHub"&gt;&lt;svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"&gt;&lt;path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/&gt;&lt;path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/&gt;&lt;path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/&gt;&lt;/svg&gt;&lt;/a&gt;&lt;style&gt;.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}&lt;/style&gt;
 
 
@@ -137,196 +129,355 @@ class: left, bottom
 
 
 
+---
+## Base R
+
+
+.pull-left[
+
+- **Functions as first-class objects** – you can assign functions to variables, pass them as arguments, and return them from other functions.  
+- **Anonymous functions** – functions without names, useful for inline transformations.  
+- **Apply family** – `lapply()`, `sapply()`, `vapply()`, enable iteration without loops.  
+- **Closures / lexical scoping** – functions that capture and retain their environment, allowing reusable workflows.  
+- **Pure functions** – functions without side effects, producing predictable results.  
+
+
+]
+
+.pull-right[
+
+
+``` r
+# Functions as first-class objects
+# You can assign a function to a variable and call it like any other function
+f &lt;- sum       
+f(1:5)
+```
+
+```
+## [1] 15
+```
+
+``` r
+# Anonymous functions
+# Functions without names, useful for inline transformations
+sapply(1:5, function(x) x^2)
+```
+
+```
+## [1]  1  4  9 16 25
+```
+
+]
+
+
+---
+## Base R II
+
+.pull-left[
+
+
+``` r
+# Closures: Functions that return other functions, capturing their environment
+make_power &lt;- function(n) {
+  function(x) x^n
+}
+square &lt;- make_power(2)  
+square(4)
+```
+
+```
+## [1] 16
+```
+
+``` r
+# Apply family
+sapply(iris[1:4], mean)
+```
+
+```
+## Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+##     5.843333     3.057333     3.758000     1.199333
+```
+
+
+]
+
+.pull-right[
+
+
+
+``` r
+# Apply family
+mapply(sum, 1:3, 4:6)
+```
+
+```
+## [1] 5 7 9
+```
+
+``` r
+# Traditional for-loop for comparison
+squares &lt;- numeric(5)
+
+for(i in 1:5) {
+  squares[i] &lt;- i^2
+}
+squares
+```
+
+```
+## [1]  1  4  9 16 25
+```
+
+
+]
+
+
+
+
+
+
 
 
 
 ---
-## 01: Why R Packages?
-
-### I will not create something like ggplot2, so why should I create a package anyway? 😳 
+## Hello Purrr
 
 .pull-left[
 
-- *Reusability and Distribution*: Make sure everything needed to run is available. Plus: simplifies version control, dependency management, and installation.
-- *Organization and Maintainability*: A package encourages a clean and organized code, making it easier to maintain, update, and extend over time.
-
-- *Documentation*: A package allows to include automatic documentation (help files, website, vignettes) , making it much easier for others - and the future yourself - to understand how it works.
-
-- 🦜 Further Goodies
+&lt;div class="info-box"&gt;
+  &lt;i&gt;🦜&lt;/i&gt; The purrr package helps you avoid repetitive code (Wickham and Henry 2025). The package is part of the tidyverse and provides a consistent, readable way to perform iteration in R. Instead of writing loops or repeating function calls manually, purrr lets you apply functions over lists, vectors, or data frames using a family of tools like map, map2, and pmap.
+&lt;/div&gt;
 
 
 ]
 
 .pull-right[
 &lt;figure&gt;
-    &lt;a href="https://r-pkgs.org" target="_blank"&gt;&lt;img src="https://r-pkgs.org/images/cover-2e-small.png" alt="www.edgar-treischl.de" width="65%"/&gt;
+    &lt;a href="https://purrr.tidyverse.org" target="_blank"&gt;&lt;img src="https://purrr.tidyverse.org/logo.png" alt="purrr.tidyverse.org" width="55%" align="center"/&gt;
     &lt;/a&gt;
 &lt;/figure&gt;
 ]
 
 
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## purrr::map
+
+.pull-left[
+
+The heart of `purrr` is its **mapping functions**, which let you apply a function systematically across a list, vector, or multiple inputs.
+
+The `map()` function applies a function to each element of a list or vector and **always returns a list**.
+
+]
+
+.pull-right[
+
+``` r
+# Create a list of numeric vectors
+num_list &lt;- list(a = 1:5, 
+                 b = 6:10, 
+                 c = 11:15)
+
+# Use map() to calculate the mean of each vector
+map(num_list, mean)
+```
+
+```
+## $a
+## [1] 3
+## 
+## $b
+## [1] 8
+## 
+## $c
+## [1] 13
+```
+]
+
+
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## purrr::map
+
+.pull-left[
+
+Each result is a list element, keeping the structure consistent. If you want a specific type of output, `purrr` provides **type-specific variants** that guarantee the output type, making your code more predictable and reducing subtle bugs.
+
+- `map_dbl()` – returns a numeric vector
+- `map_chr()` – returns a character vector
+- `map_int()` – returns an integer vector
+- `map_lgl()` – returns a logical vector
+- `map_df()` – returns a data frame
+
+
+]
+
+.pull-right[
+
+
+``` r
+# Using type-specific variants
+map_df(mtcars, mean)
+```
+
+```
+## # A tibble: 1 × 11
+##     mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1  20.1  6.19  231.  147.  3.60  3.22  17.8 0.438 0.406  3.69  2.81
+```
+
+``` r
+map_chr(mtcars, class)
+```
+
+```
+##       mpg       cyl      disp        hp      drat        wt      qsec 
+## "numeric" "numeric" "numeric" "numeric" "numeric" "numeric" "numeric" 
+##        vs        am      gear      carb 
+## "numeric" "numeric" "numeric" "numeric"
+```
+]
+
+
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## purrr::map2 – iterating over two inputs in parallel
+
+.pull-left[
+
+`map2()` is used when you want to **apply a function to two vectors or lists at the same time**, element by element. 
+
+It’s perfect for combining, comparing, or transforming two inputs together without writing explicit loops. So, `map2()` takes three main arguments:  
+
+  1. The first input vector or list (`.x`)  
+  2. The second input vector or list (`.y`)  
+  3. The function to apply to each pair of elements  
 
 
 
+]
+
+.pull-right[
+
+
+``` r
+column_names &lt;- names(mtcars)
+column_means &lt;- map_dbl(mtcars, mean)
+
+map2_chr(column_names, column_means, ~ paste(.x, "mean =", round(.y, 1)))
+```
+
+```
+##  [1] "mpg mean = 20.1"   "cyl mean = 6.2"    "disp mean = 230.7"
+##  [4] "hp mean = 146.7"   "drat mean = 3.6"   "wt mean = 3.2"    
+##  [7] "qsec mean = 17.8"  "vs mean = 0.4"     "am mean = 0.4"    
+## [10] "gear mean = 3.7"   "carb mean = 2.8"
+```
+]
 
 
 
+Here, `.x` refers to an element from the first vector (`column_names`), and `.y` refers to the corresponding element from the second vector (`column_means`). The tilde (`~`) creates an anonymous function, keeping the code concise.
 
 
 
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## purrr::pmap – iterating over multiple inputs
+
+.pull-left[
+
+When you have **more than two inputs**, `pmap()` generalizes this idea. It takes a **list of vectors or lists** and applies a function to corresponding elements across all inputs.
+
+Imagine we want to combine column names, means, and standard deviations:
+
+
+``` r
+column_sds &lt;- map_dbl(mtcars, sd)
+inputs &lt;- list(column_names, column_means, column_sds)
+
+pmamp_result &lt;- pmap(
+  inputs,
+  ~ paste(
+    ..1, " with a mean =", round(..2, 1),
+    " and a sd =", round(..3, 1)
+  )
+)
+```
 
 
 
+]
+
+.pull-right[
 
 
+``` r
+# Show the first 3 results of the list
+pmamp_result[1:3]
+```
+
+```
+## [[1]]
+## [1] "mpg  with a mean = 20.1  and a sd = 6"
+## 
+## [[2]]
+## [1] "cyl  with a mean = 6.2  and a sd = 1.8"
+## 
+## [[3]]
+## [1] "disp  with a mean = 230.7  and a sd = 123.9"
+```
 
 
+Here, `..1`, `..2`, `..3` refer to elements from the first, second, and third lists, respectively. `pmap()` allows you to work cleanly with **any number of parallel inputs**, keeping your code short and readable while avoiding nested loops.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+]
 
 
 
 
 ---
-class: center, middle
-
-.left-column[
-
-## Keep in touch
-
-#### &lt;a href="https://edgar-treischl.de" target="_blank"&gt;&lt;img src="https://avatars.githubusercontent.com/u/77931249?s=400&amp;u=eaf1d0871b643dd32cc0ff9f777edef28e6569a8&amp;v=4" alt="www.edgar-treischl.de" width="25%"/&gt;&lt;br/&gt;www.edgar-treischl.de&lt;/a&gt;
-&lt;br/&gt;
-
-#### &lt;a href="https://github.com/edgar-treischl/Workshop_reproducibleR" target="_blank"&gt;&lt;img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" alt="https://github.com/edgar-treischl" width="30%"/&gt;&lt;br/&gt;edgar-treischl&lt;/a&gt;
+class: right, middle
 
 
-]
-
-.right-column[
-&lt;br&gt;
-&lt;br&gt;
 ## Thank you for your attention!
 
 
-]
+&lt;img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/77931249?s=400&amp;u=eaf1d0871b643dd32cc0ff9f777edef28e6569a8&amp;v=4" width="150px"/&gt;
 
 
 
+[&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M505.12019,19.09375c-1.18945-5.53125-6.65819-11-12.207-12.1875C460.716,0,435.507,0,410.40747,0,307.17523,0,245.26909,55.20312,199.05238,128H94.83772c-16.34763.01562-35.55658,11.875-42.88664,26.48438L2.51562,253.29688A28.4,28.4,0,0,0,0,264a24.00867,24.00867,0,0,0,24.00582,24H127.81618l-22.47457,22.46875c-11.36521,11.36133-12.99607,32.25781,0,45.25L156.24582,406.625c11.15623,11.1875,32.15619,13.15625,45.27726,0l22.47457-22.46875V488a24.00867,24.00867,0,0,0,24.00581,24,28.55934,28.55934,0,0,0,10.707-2.51562l98.72834-49.39063c14.62888-7.29687,26.50776-26.5,26.50776-42.85937V312.79688c72.59753-46.3125,128.03493-108.40626,128.03493-211.09376C512.07526,76.5,512.07526,51.29688,505.12019,19.09375ZM384.04033,168A40,40,0,1,1,424.05,128,40.02322,40.02322,0,0,1,384.04033,168Z"&gt;&lt;/path&gt;&lt;/svg&gt; www.edgar-treischl.de](https://www.edgar-treischl.de)
 
+[&lt;svg viewBox="0 0 496 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"&gt;&lt;/path&gt;&lt;/svg&gt; edgar-treischl](https://github.com/edgar-treischl)
 
-
-
----
-
-## References (1/2)
-
-
-&lt;p&gt;&lt;cite&gt;Hester, J.
-(2023).
-&lt;em&gt;covr: Test Coverage for Packages&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=covr"&gt;https://CRAN.R-project.org/package=covr&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Hester, J., F. Angly, R. Hyde, et al.
-(2024).
-&lt;em&gt;lintr: A 'Linter' for R Code&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=lintr"&gt;https://CRAN.R-project.org/package=lintr&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Müller, K.
-(2020).
-&lt;em&gt;here: A Simpler Way to Find Your Files&lt;/em&gt;.
-R package version 1.0.1.
-URL: &lt;a href="https://CRAN.R-project.org/package=here"&gt;https://CRAN.R-project.org/package=here&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Müller, K. and L. Walthert
-(2024).
-&lt;em&gt;styler: Non-Invasive Pretty Printing of R Code&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=styler"&gt;https://CRAN.R-project.org/package=styler&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Ushey, K. and H. Wickham
-(2024).
-&lt;em&gt;renv: Project Environments&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=renv"&gt;https://CRAN.R-project.org/package=renv&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Wickham, H.
-(2023).
-&lt;em&gt;R Packages: Organize, Test, Document, and Share Your Code&lt;/em&gt;.
-Sebastopol, CA: O'Reilly.
-URL: &lt;a href="https://r-pkgs.org"&gt;https://r-pkgs.org&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Wickham, H.
-(2011).
-&amp;ldquo;testthat: Get Started with Testing&amp;rdquo;.
-In: &lt;em&gt;The R Journal&lt;/em&gt; 3, pp. 5&amp;ndash;10.
-URL: &lt;a href="https://journal.r-project.org/archive/2011-1/RJournal_2011-1_Wickham.pdf"&gt;https://journal.r-project.org/archive/2011-1/RJournal_2011-1_Wickham.pdf&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Wickham, H., J. Bryan, and M. Barrett
-(2024).
-&lt;em&gt;usethis: Automate Package and Project Setup&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=usethis"&gt;https://CRAN.R-project.org/package=usethis&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-
-
+[&lt;svg viewBox="0 0 512 512" style="height:1em;position:relative;display:inline-block;top:.1em;" xmlns="http://www.w3.org/2000/svg"&gt;  &lt;path d="M464 64H48C21.49 64 0 85.49 0 112v288c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48V112c0-26.51-21.49-48-48-48zm0 48v40.805c-22.422 18.259-58.168 46.651-134.587 106.49-16.841 13.247-50.201 45.072-73.413 44.701-23.208.375-56.579-31.459-73.413-44.701C106.18 199.465 70.425 171.067 48 152.805V112h416zM48 400V214.398c22.914 18.251 55.409 43.862 104.938 82.646 21.857 17.205 60.134 55.186 103.062 54.955 42.717.231 80.509-37.199 103.053-54.947 49.528-38.783 82.032-64.401 104.947-82.653V400H48z"&gt;&lt;/path&gt;&lt;/svg&gt; edgar.treischl@isb.bayern.de](mailto:edgar.treischl@isb.bayern.de)
 
 
 ---
-
-## References (2/2)
-
-
-&lt;p&gt;&lt;cite&gt;Wickham, H., W. Chang, R. Flight, et al.
-(2021).
-&lt;em&gt;sessioninfo: R Session Information&lt;/em&gt;.
-R package version 1.2.2.
-URL: &lt;a href="https://CRAN.R-project.org/package=sessioninfo"&gt;https://CRAN.R-project.org/package=sessioninfo&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Wickham, H., P. Danenberg, G. Csárdi, et al.
-(2024).
-&lt;em&gt;roxygen2: In-Line Documentation for R&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=roxygen2"&gt;https://CRAN.R-project.org/package=roxygen2&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Wickham, H., J. Hesselberth, M. Salmon, et al.
-(2024).
-&lt;em&gt;pkgdown: Make Static HTML Documentation for a Package&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=pkgdown"&gt;https://CRAN.R-project.org/package=pkgdown&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Wickham, H., J. Hester, W. Chang, et al.
-(2022).
-&lt;em&gt;devtools: Tools to Make Developing R Packages Easier&lt;/em&gt;.
-R package version 2.4.5.
-URL: &lt;a href="https://CRAN.R-project.org/package=devtools"&gt;https://CRAN.R-project.org/package=devtools&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
-&lt;p&gt;&lt;cite&gt;Xie, Y.
-(2024).
-&lt;em&gt;knitr: A General-Purpose Package for Dynamic Report Generation in R&lt;/em&gt;.
-URL: &lt;a href="https://CRAN.R-project.org/package=knitr"&gt;https://CRAN.R-project.org/package=knitr&lt;/a&gt;.&lt;/cite&gt;&lt;/p&gt;
+class: right, middle
 
 
 
+## Licence
 
-
-
-
-
-
-
-
-
-
-
+This presentation is licensed under a CC-BY-NC 4.0 license.
+You may copy, distribute, and use the slides in your own work, as long as you give attribution to the original author on each slide that you use. Commercial use of the contents of these slides is not allowed.
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;img src="images/by-nceu.png" alt="Image left" width="150px"/&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
