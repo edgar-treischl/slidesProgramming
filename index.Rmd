@@ -14,10 +14,7 @@ output:
       countIncrementalSlides: false
       titleSlideClass: [center, middle]
 ---
-
-background-image: url("images/bg_web.png")
-background-size: cover
-class: left, bottom
+class: left, middle, title-slide
 
 
 
@@ -97,20 +94,16 @@ meta() %>%
 cat(readLines("github-corner.html"), sep = "\n")
 ```
 
+# R Programming
 
-<h1 style="font-family: 'Bangers', sans-serif; font-size: 65px; color: #ffff;">R Programming</h1>
-<br/>
+### <a href="http://www.edgar-treischl.de" target="_blank">Dr. Edgar J. Treischl</a>
 
-<h3><a href="http://www.edgar-treischl.de" target="_blank" style="color:#C51717;">Dr. Edgar J. Treischl</a></h3>
-
-
-<br/>
 .white[Last update: `r Sys.Date()`]
-<br/>
-<h4 style = "color:#ffff; text-align: right;">Press `r emoji::emoji("o")` or `r emoji::emoji("arrow_right")`</h4>
 
+.footnote.slide-footer[
+  Press `r emoji::emoji("o")` or `r emoji::emoji("arrow_right")` to navigate
+]
 
-<div class="remark-footer"><a href="https://unsplash.com/de/@sajjadahmadi" target="_blank" style="color: gray;">Images: Sajjad Ahmadi</a></div>
 
 
 
@@ -133,8 +126,7 @@ cat(readLines("github-corner.html"), sep = "\n")
 
 ### 01 Base R 
 ### 02 Purrr 
-### 03 rlang 
-### 04 Deploy
+### 03 Purrr and friends 
 
 
 
@@ -146,6 +138,14 @@ cat(readLines("github-corner.html"), sep = "\n")
 
 
 ]
+
+---
+background-image: url("images/touch.gif")
+background-size: cover
+class: bottom, center
+
+
+# .white[Base R is a Beauty `r emoji::emoji("smile")`] 
 
 
 ---
@@ -400,7 +400,13 @@ Pipelines are great for creating linear, readable code, but when a single chain 
 ]
 
 
+---
+background-image: url("images/nice_dragon.gif")
+background-size: cover
+class: bottom, center
 
+
+# .white[Purrrrr ... <br> `r emoji::emoji("smile")`] 
 
 
 ---
@@ -613,6 +619,15 @@ pmamp_result[1:3]
 
 Here, `..1`, `..2`, `..3` refer to elements from the first, second, and third lists, respectively. `pmap()` allows you to work cleanly with **any number of parallel inputs**, keeping your code short and readable while avoiding nested loops.
 
+
+---
+background-image: url("images/leuchtturm.gif")
+background-size: cover
+class: bottom, center
+
+
+# .white[FP in Action `r emoji::emoji("fist")`] 
+
 ---
 ## Example: Reading and Cleaning Data
 
@@ -745,6 +760,14 @@ class(plots)
 ]
 
 When iterating over many elements, not every operation will go smoothly — some columns might be non-numeric, a plot might fail to render, or a transformation could throw an error.
+
+---
+background-image: url("images/cartoon.gif")
+background-size: cover
+class: bottom, center
+
+
+# .white[Purrr and friends to slay the `r emoji::emoji("dragon")`] 
 
 
 ---
