@@ -104,6 +104,9 @@ cat(readLines("github-corner.html"), sep = "\n")
   Press `r emoji::emoji("o")` or `r emoji::emoji("arrow_right")` to navigate
 ]
 
+<div class="remark-footer"><a href="https://unsplash.com/de/@synkevych" target="_blank" style="color: gray;">Image: Friedrich Justin Bertuch</a></div>
+
+
 
 
 
@@ -137,6 +140,10 @@ cat(readLines("github-corner.html"), sep = "\n")
 .pull-right[
 
 
+<img src="images/dragon_meme.jpg" alt="dragon_meme.jpg" width="85%" align="center"/>
+
+
+
 ]
 
 ---
@@ -145,7 +152,7 @@ background-size: cover
 class: bottom, center
 
 
-# .white[Base R is a Beauty `r emoji::emoji("smile")`] 
+# .white[Base R is a Real Beauty `r emoji::emoji("smile")`] 
 
 
 ---
@@ -406,7 +413,7 @@ background-size: cover
 class: bottom, center
 
 
-# .white[Purrrrr ... <br> `r emoji::emoji("smile")`] 
+# .white[Just like purrr ... <br> `r emoji::emoji("cat")`] 
 
 
 ---
@@ -433,7 +440,8 @@ class: bottom, center
 background-image: url(https://purrr.tidyverse.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
-## purrr::map
+
+## map
 
 .pull-left[
 
@@ -476,7 +484,8 @@ map(num_list, mean)
 background-image: url(https://purrr.tidyverse.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
-## purrr::map
+
+## map
 
 .pull-left[
 
@@ -506,7 +515,7 @@ map_chr(mtcars, class)
 background-image: url(https://purrr.tidyverse.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
-## purrr::map2 – iterating over two inputs
+## map2 – iterating over two inputs
 
 .pull-left[
 
@@ -558,7 +567,7 @@ Here, `.x` refers to an element from the first vector (`column_names`), and `.y`
 background-image: url(https://purrr.tidyverse.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
-## purrr::pmap – iterating over multiple inputs
+## pmap – iterating over multiple inputs
 
 .pull-left[
 
@@ -609,7 +618,7 @@ pmamp_result <- pmap(
 background-image: url(https://purrr.tidyverse.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
-## purrr::pmap II
+## pmap II
 
 ```{r}
 # Show the first 3 results of the list
@@ -637,7 +646,8 @@ Imagine, a folder full of CSV files, all with the same structure, and we need to
 .pull-left[
 
 
-=> The manual Approach:
+#### The manual `r emoji::emoji("hand")` approach
+
 
 ```{r, eval=FALSE}
 df1 <- read.csv("df1.csv")
@@ -656,7 +666,9 @@ Solving this task manually quickly becomes tedious and error-prone.
 
 .pull-right[
 
-=> The Loop
+
+#### The `r emoji::emoji("loop")` loooop
+
 
 ```{r}
 files <- list.files("data", pattern = "*.csv", full.names = TRUE)
@@ -699,7 +711,9 @@ Function programming with purrr is often cleaner, safer, and easier to maintain:
 
 .pull-right[
 
-Hallo purrr
+#### Hallo `r emoji::emoji("cat")`
+
+
 
 
 ```{r, eval=FALSE}
@@ -864,7 +878,7 @@ possibly() returns the numeric fallback NA for the failed call and proceeds smoo
 ]
 
 ---
-## walk()
+## walk
 
 
 .pull-left[
@@ -1038,4 +1052,8 @@ This presentation is licensed under a CC-BY-NC 4.0 license.
 You may copy, distribute, and use the slides in your own work, as long as you give attribution to the original author on each slide that you use. Commercial use of the contents of these slides is not allowed.
 <br/>
 <br/>
-<img src="images/by-nceu.png" alt="Image left" width="150px"/>
+<img src="images/by-nceu.png" alt="Licence" width="150px"/>
+
+
+
+

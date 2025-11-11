@@ -83,6 +83,9 @@ class: left, middle, title-slide
   Press ⭕ or ➡️ to navigate
 ]
 
+&lt;div class="remark-footer"&gt;&lt;a href="https://unsplash.com/de/@synkevych" target="_blank" style="color: gray;"&gt;Image: Friedrich Justin Bertuch&lt;/a&gt;&lt;/div&gt;
+
+
 
 
 
@@ -116,6 +119,10 @@ class: left, middle, title-slide
 .pull-right[
 
 
+&lt;img src="images/dragon_meme.jpg" alt="dragon_meme.jpg" width="85%" align="center"/&gt;
+
+
+
 ]
 
 ---
@@ -124,7 +131,7 @@ background-size: cover
 class: bottom, center
 
 
-# .white[Base R is a Beauty 😄] 
+# .white[Base R is a Real Beauty 😄] 
 
 
 ---
@@ -442,7 +449,7 @@ background-size: cover
 class: bottom, center
 
 
-# .white[Purrrrr ... &lt;br&gt; 😄] 
+# .white[Just like purrr ... &lt;br&gt; 🐱] 
 
 
 ---
@@ -469,7 +476,8 @@ class: bottom, center
 background-image: url(https://purrr.tidyverse.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
-## purrr::map
+
+## map
 
 .pull-left[
 
@@ -523,7 +531,8 @@ map(num_list, mean)
 background-image: url(https://purrr.tidyverse.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
-## purrr::map
+
+## map
 
 .pull-left[
 
@@ -558,10 +567,10 @@ map_chr(mtcars, class)
 ```
 
 ```
-##       mpg       cyl      disp        hp      drat        wt      qsec        vs 
-## "numeric" "numeric" "numeric" "numeric" "numeric" "numeric" "numeric" "numeric" 
-##        am      gear      carb 
-## "numeric" "numeric" "numeric"
+##       mpg       cyl      disp        hp      drat        wt      qsec 
+## "numeric" "numeric" "numeric" "numeric" "numeric" "numeric" "numeric" 
+##        vs        am      gear      carb 
+## "numeric" "numeric" "numeric" "numeric"
 ```
 ]
 
@@ -570,7 +579,7 @@ map_chr(mtcars, class)
 background-image: url(https://purrr.tidyverse.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
-## purrr::map2 – iterating over two inputs
+## map2 – iterating over two inputs
 
 .pull-left[
 
@@ -626,7 +635,7 @@ Here, `.x` refers to an element from the first vector (`column_names`), and `.y`
 background-image: url(https://purrr.tidyverse.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
-## purrr::pmap – iterating over multiple inputs
+## pmap – iterating over multiple inputs
 
 .pull-left[
 
@@ -677,7 +686,7 @@ pmamp_result &lt;- pmap(
 background-image: url(https://purrr.tidyverse.org/logo.png)
 background-position: 90% 5%
 background-size: 8%
-## purrr::pmap II
+## pmap II
 
 
 ``` r
@@ -717,7 +726,8 @@ Imagine, a folder full of CSV files, all with the same structure, and we need to
 .pull-left[
 
 
-=&gt; The manual Approach:
+#### The manual ✋ approach
+
 
 
 ``` r
@@ -737,7 +747,9 @@ Solving this task manually quickly becomes tedious and error-prone.
 
 .pull-right[
 
-=&gt; The Loop
+
+#### The ➿ loooop
+
 
 
 ``` r
@@ -781,7 +793,9 @@ Function programming with purrr is often cleaner, safer, and easier to maintain:
 
 .pull-right[
 
-Hallo purrr
+#### Hallo 🐱
+
+
 
 
 
@@ -879,8 +893,8 @@ mean(data_list[[1]])
 ```
 
 ```
-## Warning in mean.default(data_list[[1]]): argument is not numeric or logical:
-## returning NA
+## Warning in mean.default(data_list[[1]]): argument is not numeric or
+## logical: returning NA
 ```
 
 ```
@@ -967,7 +981,7 @@ possibly() returns the numeric fallback NA for the failed call and proceeds smoo
 ]
 
 ---
-## walk()
+## walk
 
 
 .pull-left[
@@ -1148,7 +1162,11 @@ This presentation is licensed under a CC-BY-NC 4.0 license.
 You may copy, distribute, and use the slides in your own work, as long as you give attribution to the original author on each slide that you use. Commercial use of the contents of these slides is not allowed.
 &lt;br/&gt;
 &lt;br/&gt;
-&lt;img src="images/by-nceu.png" alt="Image left" width="150px"/&gt;
+&lt;img src="images/by-nceu.png" alt="Licence" width="150px"/&gt;
+
+
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
