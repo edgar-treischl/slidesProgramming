@@ -402,7 +402,11 @@ sapply(1:5, function(x) x^2)
 
 .pull-left[
 
-**Pure functions** – functions without side effects (e.g. data export, printing), producing predictable results. Impure functions break predictability, reproducibility, testability, and parallel safety.
+#### `r emoji::emoji("sponge")` Pure functions 
+
+– functions without side effects (e.g. data export, printing), producing predictable results. 
+
+- Impure functions break predictability, reproducibility, testability, and parallel safety.
 
 ```{r}
 # Impure function
@@ -422,7 +426,9 @@ add_to_x(2)
 
 .pull-right[
 
-**Closures / lexical scoping** – A closure is a function that captures (or “closes over”) variables from its surrounding environment — meaning it remembers the values that existed when it was created.  
+
+#### `r emoji::emoji("cyclone")` Closures / lexical scoping
+- A closure is a function that captures (or “closes over”) variables from its surrounding environment — meaning it remembers the values that existed when it was created.  
 
 
 ```{r}
@@ -443,11 +449,12 @@ square(4)
 
 
 ---
-## Base R: Apply Functions
+## Base R: Interation
 
 .pull-left[
 
-**Apply family** – `lapply()`, `sapply()`, `vapply()`, enable iteration without loops. For example, sapply() applies a function to each element and simplifies the output to a vector or matrix when possible.
+#### `r emoji::emoji("gear")` Apply family
+- `lapply()`, `sapply()`, `vapply()`, enable iteration without loops. For example, sapply() applies a function to each element and simplifies the output to a vector or matrix when possible.
 
 ```{r}
 # Apply family: Sapply
@@ -463,7 +470,7 @@ mapply(sum, 1:3, 4:6)
 
 .pull-right[
 
-#### Sapply makes it hard to predict the output type
+#### `r emoji::emoji("point_right")` Sapply makes it hard to predict the output
 
 
 ```{r}
@@ -492,8 +499,9 @@ class(mylist)
 
 .pull-left[
 
+#### `r emoji::emoji("repeat")` While-loop
 
-**While-loop** – repeat operations *as long as a condition is TRUE*.
+- repeat operations *as long as a condition is TRUE*.
 
 ```{r}
 # While-loop
@@ -518,7 +526,8 @@ Useful when the number of iterations is not known in advance, or when looping de
 
 .pull-right[
 
-**For-loop** – repeat operations over a sequence of values.
+#### `r emoji::emoji("repeat_one")` For-loop
+  – repeat operations over a sequence of values.
 
 
 ```{r}
@@ -545,7 +554,11 @@ Useful for iterative tasks, but vectorized alternatives (like `sapply`) are ofte
 
 .pull-left[
 
-**Vectorization** – performing operations on entire vectors at once, avoiding explicit loops. Leads to **faster, simpler, and more readable code**.
+
+#### `r emoji::emoji("input_numbers")` Vectorization
+
+- performing operations on entire vectors at once, avoiding explicit loops. 
+- Leads to **faster, simpler, and more readable code**.
 
 
 ```{r}
@@ -568,7 +581,9 @@ squares_vec
 
 .pull-right[
 
-**Pipe operator (`%>%`)** – passes the output of one expression as the input to the next, enabling **clear, readable, and sequential transformations**.
+#### `r emoji::emoji("chains")` Pipe operator (`%>%`)
+
+- passes the output of one expression as the input to the next, enabling **clear, readable, and sequential transformations**.
 
 
 
@@ -653,7 +668,7 @@ num_list <- list(a = 1:5,
                  b = 6:10, 
                  c = 11:15)
 
-# Use map() to calculate the mean of each vector
+# Calculate the mean of each vector
 map(num_list, mean)
 
 ```
@@ -806,7 +821,7 @@ pmap_result[1:3]
 ```
 
 
-`pmap()` allows you to work cleanly with **any number of parallel inputs**, keeping your code short and readable while avoiding nested loops.
+#### `r emoji::emoji("point_right")` `pmap()` allows you to work cleanly with **any number of parallel inputs**, keeping your code short and readable while avoiding nested loops.
 
 
 
@@ -870,6 +885,23 @@ The loop works, better than a manual approch, but there are some downsides:
 - You have to manually manage the **index** `i` and the `dfs` list.
 - The code is **verbose**, with variables that can clutter your workspace.
 - It’s **less composable**, making it harder to fit into a pipe-based workflow or reuse as a function.
+
+---
+## Gapminder
+
+
+- The Gapminder data contains country-level statistics on life expectancy, GDP per capita, and population over time.
+
+<figure>
+    <a href="https://www.gapminder.org" target="_blank"><img src="images/gapminder.png" alt="gapminder bubble chart" width="70%" align="center"/>
+    </a>
+</figure>
+
+
+- I splitted the original dataset into separate files by country and year. 
+
+- Your task is to read all CSV files and combine them into a single cleaned data frame.
+
 
 
 
