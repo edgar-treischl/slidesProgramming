@@ -302,10 +302,10 @@ randomize(x = c(3, 2, 1, 5, 8, 12, 1))
 ```
 
 ```
-## [1] 1
+## [1] 5
 ```
 
-#### 🔮 Snippet your way, in RStudio, type: 
+#### 🧙 Snippet your way, in RStudio, type: 
 
 
 ``` r
@@ -391,7 +391,7 @@ randomize(x = c(3, 2, 1, 5, 8, 12, 1))
 
 
 ---
-## Base R (1/4)
+## Base R: Functions
 
 
 .pull-left[
@@ -402,7 +402,7 @@ randomize(x = c(3, 2, 1, 5, 8, 12, 1))
 
 
 ``` r
-# Assigning a function to a variable
+# Assigning a function
 f &lt;- sum       
 f(1:5)
 ```
@@ -439,7 +439,7 @@ apply_fun(1:5, mean)
   
 
 ``` r
-# Anonymous functions: for inline transformations
+# Anonymous functions
 sapply(1:5, function(x) x^2)
 ```
 
@@ -452,32 +452,36 @@ sapply(1:5, function(x) x^2)
 
 
 ---
-## Base R (2/4)
+## Base R: Functions II
 
 .pull-left[
 
-**Apply family** – `lapply()`, `sapply()`, `vapply()`, enable iteration without loops. For example, sapply() applies a function to each element and simplifies the output to a vector or matrix when possible.
+**Pure functions** – functions without side effects (e.g. data export, printing), producing predictable results. Impure functions break predictability, reproducibility, testability, and parallel safety.
 
 
 ``` r
-# Apply family
-sapply(iris[1:4], mean)
+# Impure function
+x &lt;- 5
+
+add_to_x &lt;- function(y) {
+  x &lt;&lt;- x + y  # modifies a global variable
+  return(x)
+}
+
+add_to_x(3)
 ```
 
 ```
-## Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
-##     5.843333     3.057333     3.758000     1.199333
+## [1] 8
 ```
 
 ``` r
-# Apply family
-mapply(sum, 1:3, 4:6)
+add_to_x(2)
 ```
 
 ```
-## [1] 5 7 9
+## [1] 10
 ```
-
 
 ]
 
@@ -507,37 +511,105 @@ square(4)
 
 
 ---
-## Base R (3/4)
+## Base R: Apply Functions
+
+.pull-left[
+
+**Apply family** – `lapply()`, `sapply()`, `vapply()`, enable iteration without loops. For example, sapply() applies a function to each element and simplifies the output to a vector or matrix when possible.
+
+
+``` r
+# Apply family: Sapply
+sapply(iris[1:4], mean)
+```
+
+```
+## Sepal.Length  Sepal.Width Petal.Length  Petal.Width 
+##     5.843333     3.057333     3.758000     1.199333
+```
+
+``` r
+# Apply family: Mapply
+mapply(sum, 1:3, 4:6)
+```
+
+```
+## [1] 5 7 9
+```
+
+
+]
+
+.pull-right[
+
+#### Sapply makes it hard to predict the output type
+
+
+
+``` r
+mylist &lt;- list(1:3, 4:6)
+class(mylist)
+```
+
+```
+## [1] "list"
+```
+
+``` r
+#&gt; 01
+mylist &lt;- sapply(mylist, sum)
+class(mylist)
+```
+
+```
+## [1] "integer"
+```
+
+``` r
+#&gt; 02
+mylist &lt;- sapply(mylist, range)
+class(mylist)
+```
+
+```
+## [1] "matrix" "array"
+```
+
+
+]
+
+
+
+
+
+---
+## Base R: Loops
 
 .pull-left[
 
 
-**Pure functions** – functions without side effects (e.g. data export, printing), producing predictable results. Impure functions break predictability, reproducibility, testability, and parallel safety.
+**While-loop** – repeat operations *as long as a condition is TRUE*.
 
 
 ``` r
-# Impure function
-x &lt;- 5
+# While-loop
+count &lt;- 1
+result &lt;- c()
 
-add_to_x &lt;- function(y) {
-  x &lt;&lt;- x + y  # modifies a global variable
-  return(x)
+while(count &lt;= 5) {
+  result &lt;- c(result, count^2)
+  count &lt;- count + 1
 }
 
-add_to_x(3)
+result
 ```
 
 ```
-## [1] 8
+## [1]  1  4  9 16 25
 ```
 
-``` r
-add_to_x(2)
-```
 
-```
-## [1] 10
-```
+Useful when the number of iterations is not known in advance, or when looping depends on a changing condition.
 
 
 
@@ -812,7 +884,7 @@ map2result[1:3]
 ## [1] "mpg mean = 20.1"   "cyl mean = 6.2"    "disp mean = 230.7"
 ```
 
-Here, `.x` refers to an element from the first vector (`column_names`), and `.y` refers to the corresponding element from the second vector (`column_means`). The tilde (`~`) creates an anonymous function, keeping the code concise.
+Here, `.x` refers to an element from the first vector (`column_names`), `.y` refers to the corresponding element from the second vector (`column_means`); the tilde (`~`) creates an anonymous function.
 
 ]
 
@@ -853,7 +925,7 @@ Imagine we want to combine column names, means, and standard deviations:
 column_sds &lt;- map_dbl(mtcars, sd)
 inputs &lt;- list(column_names, column_means, column_sds)
 
-pmamp_result &lt;- pmap(
+pmap_result &lt;- pmap(
   inputs,
   ~ paste(
     ..1, " with a mean =", round(..2, 1),
@@ -862,7 +934,7 @@ pmamp_result &lt;- pmap(
 )
 ```
 
-
+Here, `..1`, `..2`, `..3` refer to elements from the first, second, and third lists, respectively. 
 
 
 ]
@@ -877,7 +949,7 @@ background-size: 8%
 
 ``` r
 # Show the first 3 results of the list
-pmamp_result[1:3]
+pmap_result[1:3]
 ```
 
 ```
@@ -892,7 +964,8 @@ pmamp_result[1:3]
 ```
 
 
-Here, `..1`, `..2`, `..3` refer to elements from the first, second, and third lists, respectively. `pmap()` allows you to work cleanly with **any number of parallel inputs**, keeping your code short and readable while avoiding nested loops.
+`pmap()` allows you to work cleanly with **any number of parallel inputs**, keeping your code short and readable while avoiding nested loops.
+
 
 
 ---
@@ -924,7 +997,7 @@ df101 &lt;- read.csv("df101.csv")
 ```
 
 
-Solving this task manually quickly becomes tedious and error-prone. 
+Don't: This is tedious and error-prone!
 
 
 
@@ -953,10 +1026,12 @@ for (i in seq_along(files)) {
 
 ]
 
-The loop works, is better a manual approch, but there are some downsides:
+The loop works, better than a manual approch, but there are some downsides:
 - You have to manually manage the **index** `i` and the `dfs` list.
 - The code is **verbose**, with variables that can clutter your workspace.
 - It’s **less composable**, making it harder to fit into a pipe-based workflow or reuse as a function.
+
+
 
 
 ---
@@ -999,6 +1074,53 @@ dfs &lt;- files |&gt;
 
 
 ]
+
+
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+
+## imap
+
+.pull-left[
+
+`imap()` is a variant of `map()` that supplies **both the element and its name (or index)** to the function.  
+This makes it useful when you need to work with **values + names** at the same time.
+
+
+`imap()` applies a function to each element of a list or vector and passes two arguments:
+- `.x` = the value  
+- `.y` = the name (or index)
+
+It **always returns a list**, like `map()`.
+
+]
+
+.pull-right[
+
+``` r
+# A named list
+num_list &lt;- list(a = 1:3,
+                 b = 4:6,
+                 c = 7:9)
+
+# Use imap() to create labeled summaries
+imap(num_list, ~ paste0("Mean of ", .y, ": ", mean(.x)))
+```
+
+```
+## $a
+## [1] "Mean of a: 2"
+## 
+## $b
+## [1] "Mean of b: 5"
+## 
+## $c
+## [1] "Mean of c: 8"
+```
+]
+
 
 
 ---
@@ -1288,6 +1410,12 @@ background-size: 8%
 - Parallelism can significantly speed up operations by distributing tasks across multiple CPU cores. The latter is also a advanced topic which is why we only touch it briefly here.
 
 
+
+]
+
+.pull-right[
+
+
 ``` r
 # Prepare inputs
 column_names &lt;- names(mtcars)
@@ -1299,11 +1427,18 @@ mirai::require_daemons()
 
 
 
+
 ]
 
-.pull-right[
 
-- We can export the list of plots in parallel:
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## Parallel Processing II
+
+
+Now we can export the list of plots in parallel:
 
 
 ``` r
@@ -1321,11 +1456,6 @@ plots_parallel &lt;- map2(
     )
 )
 ```
-
-
-
-
-]
 
 
 

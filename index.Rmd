@@ -353,7 +353,7 @@ randomize(x = c(3, 2, 1, 5, 8, 12, 1))
 
 
 ---
-## Base R (1/4)
+## Base R: Functions
 
 
 .pull-left[
@@ -363,7 +363,7 @@ randomize(x = c(3, 2, 1, 5, 8, 12, 1))
   - you can assign functions to variables, pass them as arguments, and return them from other functions
 
 ```{r}
-# Assigning a function to a variable
+# Assigning a function
 f <- sum       
 f(1:5)
 
@@ -389,7 +389,7 @@ apply_fun(1:5, mean)
   
   
 ```{r}
-# Anonymous functions: for inline transformations
+# Anonymous functions
 sapply(1:5, function(x) x^2)
 ```
 
@@ -398,26 +398,25 @@ sapply(1:5, function(x) x^2)
 
 
 ---
-## Base R (2/4)
+## Base R: Functions II
 
 .pull-left[
 
-**Apply family** – `lapply()`, `sapply()`, `vapply()`, enable iteration without loops. For example, sapply() applies a function to each element and simplifies the output to a vector or matrix when possible.
+**Pure functions** – functions without side effects (e.g. data export, printing), producing predictable results. Impure functions break predictability, reproducibility, testability, and parallel safety.
 
 ```{r}
+# Impure function
+x <- 5
 
-# Apply family
-sapply(iris[1:4], mean)
+add_to_x <- function(y) {
+  x <<- x + y  # modifies a global variable
+  return(x)
+}
 
-# Apply family
-mapply(sum, 1:3, 4:6)
+add_to_x(3)
 
-
-
-
-
+add_to_x(2)
 ```
-
 
 ]
 
@@ -444,26 +443,73 @@ square(4)
 
 
 ---
-## Base R (3/4)
+## Base R: Apply Functions
+
+.pull-left[
+
+**Apply family** – `lapply()`, `sapply()`, `vapply()`, enable iteration without loops. For example, sapply() applies a function to each element and simplifies the output to a vector or matrix when possible.
+
+```{r}
+# Apply family: Sapply
+sapply(iris[1:4], mean)
+
+# Apply family: Mapply
+mapply(sum, 1:3, 4:6)
+
+```
+
+
+]
+
+.pull-right[
+
+#### Sapply makes it hard to predict the output type
+
+
+```{r}
+mylist <- list(1:3, 4:6)
+class(mylist)
+
+#> 01
+mylist <- sapply(mylist, sum)
+class(mylist)
+
+#> 02
+mylist <- sapply(mylist, range)
+class(mylist)
+
+```
+
+
+]
+
+
+
+
+
+---
+## Base R: Loops
 
 .pull-left[
 
 
-**Pure functions** – functions without side effects (e.g. data export, printing), producing predictable results. Impure functions break predictability, reproducibility, testability, and parallel safety.
+**While-loop** – repeat operations *as long as a condition is TRUE*.
 
 ```{r}
-# Impure function
-x <- 5
+# While-loop
+count <- 1
+result <- c()
 
-add_to_x <- function(y) {
-  x <<- x + y  # modifies a global variable
-  return(x)
+while(count <= 5) {
+  result <- c(result, count^2)
+  count <- count + 1
 }
 
-add_to_x(3)
-
-add_to_x(2)
+result
 ```
+
+
+Useful when the number of iterations is not known in advance, or when looping depends on a changing condition.
 
 
 
@@ -692,7 +738,7 @@ map2result[1:3]
 
 ```
 
-Here, `.x` refers to an element from the first vector (`column_names`), and `.y` refers to the corresponding element from the second vector (`column_means`). The tilde (`~`) creates an anonymous function, keeping the code concise.
+Here, `.x` refers to an element from the first vector (`column_names`), `.y` refers to the corresponding element from the second vector (`column_means`); the tilde (`~`) creates an anonymous function.
 
 ]
 
@@ -732,7 +778,7 @@ Imagine we want to combine column names, means, and standard deviations:
 column_sds <- map_dbl(mtcars, sd)
 inputs <- list(column_names, column_means, column_sds)
 
-pmamp_result <- pmap(
+pmap_result <- pmap(
   inputs,
   ~ paste(
     ..1, " with a mean =", round(..2, 1),
@@ -742,7 +788,7 @@ pmamp_result <- pmap(
 
 ```
 
-
+Here, `..1`, `..2`, `..3` refer to elements from the first, second, and third lists, respectively. 
 
 
 ]
@@ -756,11 +802,12 @@ background-size: 8%
 
 ```{r}
 # Show the first 3 results of the list
-pmamp_result[1:3]
+pmap_result[1:3]
 ```
 
 
-Here, `..1`, `..2`, `..3` refer to elements from the first, second, and third lists, respectively. `pmap()` allows you to work cleanly with **any number of parallel inputs**, keeping your code short and readable while avoiding nested loops.
+`pmap()` allows you to work cleanly with **any number of parallel inputs**, keeping your code short and readable while avoiding nested loops.
+
 
 
 ---
@@ -791,7 +838,7 @@ df101 <- read.csv("df101.csv")
 ```
 
 
-Solving this task manually quickly becomes tedious and error-prone. 
+Don't: This is tedious and error-prone!
 
 
 
@@ -819,10 +866,12 @@ for (i in seq_along(files)) {
 
 ]
 
-The loop works, is better a manual approch, but there are some downsides:
+The loop works, better than a manual approch, but there are some downsides:
 - You have to manually manage the **index** `i` and the `dfs` list.
 - The code is **verbose**, with variables that can clutter your workspace.
 - It’s **less composable**, making it harder to fit into a pipe-based workflow or reuse as a function.
+
+
 
 
 ---
@@ -864,6 +913,41 @@ dfs <- files |>
 
 
 ]
+
+
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+
+## imap
+
+.pull-left[
+
+`imap()` is a variant of `map()` that supplies **both the element and its name (or index)** to the function.  
+This makes it useful when you need to work with **values + names** at the same time.
+
+
+`imap()` applies a function to each element of a list or vector and passes two arguments:
+- `.x` = the value  
+- `.y` = the name (or index)
+
+It **always returns a list**, like `map()`.
+
+]
+
+.pull-right[
+```{r}
+# A named list
+num_list <- list(a = 1:3,
+                 b = 4:6,
+                 c = 7:9)
+
+# Use imap() to create labeled summaries
+imap(num_list, ~ paste0("Mean of ", .y, ": ", mean(.x)))
+```
+]
+
 
 
 ---
@@ -1127,6 +1211,12 @@ background-size: 8%
 
 - Parallelism can significantly speed up operations by distributing tasks across multiple CPU cores. The latter is also a advanced topic which is why we only touch it briefly here.
 
+
+
+]
+
+.pull-right[
+
 ```{r, eval=FALSE}
 # Prepare inputs
 column_names <- names(mtcars)
@@ -1138,11 +1228,18 @@ mirai::require_daemons()
 
 
 
+
 ]
 
-.pull-right[
 
-- We can export the list of plots in parallel:
+---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## Parallel Processing II
+
+
+Now we can export the list of plots in parallel:
 
 ```{r, eval=FALSE}
 # Export histograms in parallel
@@ -1159,11 +1256,6 @@ plots_parallel <- map2(
     )
 )
 ```
-
-
-
-
-]
 
 
 
