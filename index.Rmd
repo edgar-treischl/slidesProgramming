@@ -75,15 +75,15 @@ library(metathis)
 meta() %>%
   meta_general(
     description = "Slides: R Programming",
-    generator = "xaringan and remark.js"
+    generator = "Programming with R and purrr",
   ) %>% 
-  meta_name("github-repo" = "edgar-treischl/slidesRinProduction") %>% 
+  meta_name("github-repo" = "edgar-treischl/slidesProgramming") %>% 
   meta_social(
     title = "R Programming",
-    url = "https://edgar-treischl.github.io/slidesRinProduction/",
+    url = "https://edgar-treischl.github.io/slidesProgramming",
     og_type = "website",
     og_author = "Edgar J. Treischl",
-    image = "https://edgar-treischl.github.io/slidesRinProduction
+    image = "https://edgar-treischl.github.io/slidesProgramming
 /images/preview.png",
     image_alt = "Title Slide"
   )
@@ -156,27 +156,16 @@ class: bottom, center
 
 
 ---
-## Basic R
+## R Basics
+
+**Functions for data exploration ** 
 
 .pull-left[
 
-
-- Data Exploration
-  - `head/tail(x)` – view first/last rows  
-  - `str(x)` – structure of an object  
-  - `names(x)` – column or element names
-
-- Indexing and Subsetting
-  - `x[i]` – subset vector  
-  - `x[i, j]` – subset matrix/data.frame  
-  - `x[condition]` – logical indexing  
-  - `subset(x, condition)` – filter rows
-
-- Vector & Sequence Operations
-  - `c()` – combine values into a vector  
-  - `seq()`, `rep()` – generate sequences/repeats  
-  - `sort(x)` – sort a vector  
-  - `rev(x)` – reverse elements
+```{r}
+# View first rows / head of mtcars
+head(mtcars)
+```
 
 
 
@@ -185,17 +174,166 @@ class: bottom, center
 
 .pull-right[
 
-- Basic Math & Statistics
+```{r}
+# Structure of mtcars
+str(mtcars)
+```
+
+
+
+]
+
+
+---
+## R Basics II
+
+**Functions for data manipulation ** 
+
+
+.pull-left[
+
+
+```{r}
+# Class of mtcars
+class(mtcars)
+```
+
+```{r}
+# Create a vector/Subset the 2nd element
+myvec <- c("This", "is", "awesome")
+myvec[3]
+```
+
+
+
+]
+
+.pull-right[
+
+```{r}
+# Subset by condition
+head(mtcars[mtcars$cyl == 6, ])
+
+```
+
+
+
+]
+
+
+---
+## R Basics III
+
+
+.pull-left[
+
+#### `r emoji::emoji("left_arrow")` Assignment Operator
+
+```{r}
+# AB(C) of the assignment operator
+a <- 5
+b <- 6
+
+# The result
+result <- a + b
+result
+```
+
+
+#### `r emoji::emoji("wand")` Assign like a Pro, press:
+
+```{r}
+#> < Alt/Option > + < - >
+#> (Windows/Unix)
+```
+
+
+
+]
+
+
+.pull-right[
+
+#### `r emoji::emoji("toolbox")` Functions
+
+
+```{r}
+# Create a function
+randomize <- function(x) {
+  sample_x <- sample(x, 1)
+  return(sample_x)
+}
+
+# Call and feed the function
+randomize(x = c(3, 2, 1, 5, 8, 12, 1))
+```
+
+#### `r emoji::emoji("magic")` Snippet your way, in RStudio, type: 
+
+```{r}
+#> `fun` and press `<Tab>`
+```
+
+
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+## R Basics Summary
+
+.pull-left[
+
+
+- **Data Exploration**
+  - `head/tail(x)` – view first/last rows  
+  - `str(x)` – structure of an object  
+  - `names(x)` – column or element names
+  - `class(x)` – object class
+
+- **Indexing and Subsetting**
+  - `x[i]` – subset vector  
+  - `x[i, j]` – subset matrix/data.frame  
+  - `x[condition]` – logical indexing  
+  - `subset(x, condition)` – filter rows
+
+- **Vector & Sequence Operations**
+  - `c()` – combine values into a vector  
+  - `seq()`, `rep()` – generate sequences/repeats  
+  - `sort(x)` – sort a vector  
+  - `rev(x)` – reverse elements
+  - `length(x)` – length of a vector
+
+
+
+
+]
+
+.pull-right[
+
+- **Basic Math & Statistics**
   - `sum(x)`, `prod(x)` – sum/product  
   - `mean(x)`, `median(x)`, `var(x)`, `sd(x)` – statistics
   ...
 
-- Logical & Comparison
+- **Logical & Comparison**
   - `==`, `!=`, `<`, `>`, `<=`, `>=` – comparisons  
   - `&`, `|`, `!` – logical AND, OR, NOT  
   - `any()`, `all()` – check logical conditions over vectors
 
-- Object Manipulation
+- **Object Manipulation**
   - `cbind()`, `rbind()` – combine matrices or data frames  
   - `merge()` – join data frames  
   - `dimnames()` – get/set row/column names  
@@ -220,7 +358,9 @@ class: bottom, center
 
 .pull-left[
 
-**Functions as first-class objects** – you can assign functions to variables, pass them as arguments, and return them from other functions.
+
+#### `r emoji::emoji("one")` Functions as first-class objects
+  - you can assign functions to variables, pass them as arguments, and return them from other functions
 
 ```{r}
 # Assigning a function to a variable
@@ -243,20 +383,14 @@ apply_fun(1:5, mean)
 
 .pull-right[
 
-**Anonymous functions** – functions without names, useful for inline transformations.  
-
+#### `r emoji::emoji("ghost")` Anonymous functions
+  - functions without names, useful for inline transformations
+  - anonymous functions are created on the fly using the `function` keyword and can be passed directly as arguments to other functions
+  
+  
 ```{r}
 # Anonymous functions: for inline transformations
 sapply(1:5, function(x) x^2)
-```
-
-```{r}
-library(dplyr)
-
-mtcars |> 
-  mutate(hp_scaled = sapply(hp, function(x) x / max(hp))) |> 
-  select(hp, hp_scaled) |> 
-  head(n = 2)
 ```
 
 
@@ -785,6 +919,9 @@ class: bottom, center
 
 
 ---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
 ## safely
 
 .pull-left[
@@ -811,7 +948,6 @@ mean(data_list[[1]])
 
 .pull-right[
 
-With purrr
 
 ```{r}
 # Wrap mean() safely
@@ -837,6 +973,9 @@ flatten_dbl(compact(numeric_results))
 ]
 
 ---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
 ## possibly
 
 .pull-left[
@@ -863,7 +1002,7 @@ data_list <- list(
 
 .pull-right[
 
-With purrr
+
 
 ```{r}
 # Wrap with possibly()
@@ -878,6 +1017,9 @@ possibly() returns the numeric fallback NA for the failed call and proceeds smoo
 ]
 
 ---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
 ## walk
 
 
@@ -916,6 +1058,9 @@ walk(names(plots), ~ {
 
 
 ---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
 ## quietly
 
 .pull-left[
@@ -944,7 +1089,7 @@ example_fun <- function(x) {
 
 .pull-right[
 
-With purrr
+
 
 ```{r}
 library(purrr)
@@ -968,6 +1113,9 @@ All output, warnings, and messages are captured in the list elements for inspect
 
 
 ---
+background-image: url(https://purrr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
 ## Parallel Processing
 
 
