@@ -1,6 +1,5 @@
 ---
 title: "R Programming"
-date: "Last update: `r Sys.Date()`"
 output:
   xaringan::moon_reader:
     css: ["xaringan-themer.css", "styles.css"] 
@@ -98,7 +97,7 @@ cat(readLines("github-corner.html"), sep = "\n")
 
 ### <a href="http://www.edgar-treischl.de" target="_blank">Dr. Edgar J. Treischl</a>
 
-.white[Last update: `r Sys.Date()`]
+.black[Last update: `r Sys.Date()`]
 
 .footnote.slide-footer[
   Press `r emoji::emoji("o")` or `r emoji::emoji("arrow_right")` to navigate
