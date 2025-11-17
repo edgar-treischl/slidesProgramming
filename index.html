@@ -20,13 +20,13 @@
     <meta name="twitter:description" content="Slides: R Programming"/>
     <meta name="twitter:url" content="https://edgar-treischl.github.io/slidesProgramming"/>
     <meta name="twitter:image" content="https://edgar-treischl.github.io/slidesProgramming&#10;/images/preview.png"/>
-    <meta name="twitter:image:alt" content="Title Slide"/>
+    <meta name="twitter:image:alt" content="R Programming Slides"/>
     <meta name="twitter:card" content="summary"/>
     <meta property="og:title" content="R Programming"/>
     <meta property="og:description" content="Slides: R Programming"/>
     <meta property="og:url" content="https://edgar-treischl.github.io/slidesProgramming"/>
     <meta property="og:image" content="https://edgar-treischl.github.io/slidesProgramming&#10;/images/preview.png"/>
-    <meta property="og:image:alt" content="Title Slide"/>
+    <meta property="og:image:alt" content="R Programming Slides"/>
     <meta property="og:type" content="website"/>
     <meta property="og:locale" content="en_US"/>
     <meta property="article:author" content="Edgar J. Treischl"/>
@@ -77,15 +77,11 @@ class: left, middle, title-slide
 
 ### &lt;a href="http://www.edgar-treischl.de" target="_blank"&gt;Dr. Edgar J. Treischl&lt;/a&gt;
 
-.black[Last update: 2025-11-16]
+.black[Last update: 2025-11-17]
 
 .footnote.slide-footer[
   Press ⭕ or ➡️ to navigate
 ]
-
-&lt;div class="remark-footer"&gt;&lt;a href="https://unsplash.com/de/@synkevych" target="_blank" style="color: gray;"&gt;Image: Friedrich Justin Bertuch&lt;/a&gt;&lt;/div&gt;
-
-
 
 
 
@@ -271,7 +267,7 @@ result
 ```
 
 
-#### 🪄 Assign like a Pro, press:
+#### Assign like a Pro, press:
 
 
 ``` r
@@ -286,7 +282,7 @@ result
 
 .pull-right[
 
-#### 🧰 Functions
+#### 🧰 Create your own functions
 
 
 
@@ -302,10 +298,10 @@ randomize(x = c(3, 2, 1, 5, 8, 12, 1))
 ```
 
 ```
-## [1] 8
+## [1] 12
 ```
 
-#### 🧙‍♀️ Snippet your way, in RStudio, type: 
+#### Snippet your way, in RStudio, type: 
 
 
 ``` r
@@ -364,7 +360,8 @@ randomize(x = c(3, 2, 1, 5, 8, 12, 1))
 - **Basic Math &amp; Statistics**
   - `sum(x)`, `prod(x)` – sum/product  
   - `mean(x)`, `median(x)`, `var(x)`, `sd(x)` – statistics
-  ...
+  - `min(x)`, `max(x)` – minimum/maximum
+  - `round(x, digits)` – round numbers
 
 - **Logical &amp; Comparison**
   - `==`, `!=`, `&lt;`, `&gt;`, `&lt;=`, `&gt;=` – comparisons  
@@ -397,8 +394,8 @@ randomize(x = c(3, 2, 1, 5, 8, 12, 1))
 .pull-left[
 
 
-#### 1️⃣ Functions as first-class objects
-  - you can assign functions to variables, pass them as arguments, and return them from other functions
+#### 1️⃣ Functions as first-class objects:
+You can assign functions to variables, pass them as arguments, and return them from other functions
 
 
 ``` r
@@ -432,9 +429,8 @@ apply_fun(1:5, mean)
 
 .pull-right[
 
-#### 👻 Anonymous functions
-  - functions without names, useful for inline transformations
-  - anonymous functions are created on the fly using the `function` keyword and can be passed directly as arguments to other functions
+#### 👻 Anonymous functions:
+Functions without names. Anonymous functions are created on the fly using the `function` keyword and can be passed directly as arguments to other functions
   
   
 
@@ -456,11 +452,8 @@ sapply(1:5, function(x) x^2)
 
 .pull-left[
 
-#### 🧽 Pure functions 
-
-– functions without side effects (e.g. data export, printing), producing predictable results. 
-
-- Impure functions break predictability, reproducibility, testability, and parallel safety.
+#### 🧽 Pure functions:
+Functions without side effects (e.g. data export, printing), producing predictable results. *Impure functions* break predictability, reproducibility, testability, and parallel safety.
 
 
 ``` r
@@ -492,8 +485,8 @@ add_to_x(2)
 .pull-right[
 
 
-#### 🌀 Closures / lexical scoping
-- A closure is a function that captures (or “closes over”) variables from its surrounding environment — meaning it remembers the values that existed when it was created.  
+#### 🌀 Closures/lexical scoping:
+A closure is a function that captures (or “closes over”) variables from its surrounding environment — meaning it remembers the values that existed when it was created.  
 
 
 
@@ -522,7 +515,7 @@ square(4)
 .pull-left[
 
 #### ⚙️ Apply family
-- `lapply()`, `sapply()`, `vapply()`, enable iteration without loops. For example, sapply() applies a function to each element and simplifies the output to a vector or matrix when possible.
+Function like `lapply()`, `sapply()`, `vapply()` enable iteration without loops. For example, sapply() applies a function to each element of a vector (matrix) and simplifies the output when possible.
 
 
 ``` r
@@ -595,8 +588,7 @@ class(mylist)
 .pull-left[
 
 #### 🔁 While-loop
-
-- repeat operations *as long as a condition is TRUE*.
+Repeat operations *as long as a condition is TRUE*.
 
 
 ``` r
@@ -627,7 +619,7 @@ Useful when the number of iterations is not known in advance, or when looping de
 .pull-right[
 
 #### 🔂 For-loop
-  – repeat operations over a sequence of values.
+Repeat operations over a sequence of values.
 
 
 
@@ -660,9 +652,7 @@ Useful for iterative tasks, but vectorized alternatives (like `sapply`) are ofte
 
 
 #### 🔢 Vectorization
-
-- performing operations on entire vectors at once, avoiding explicit loops. 
-- Leads to **faster, simpler, and more readable code**.
+It enables performing operations on entire vectors at once, avoiding explicit loops. Leads to **faster, simpler, and more readable code**.
 
 
 
@@ -690,8 +680,7 @@ squares_vec
 .pull-right[
 
 #### ⛓️ Pipe operator (`%&gt;%`)
-
-- passes the output of one expression as the input to the next, enabling **clear, readable, and sequential transformations**.
+It passes the output of one expression as the input to the next, enabling **clear, readable, and sequential transformations**.
 
 
 
@@ -722,7 +711,7 @@ background-size: cover
 class: bottom, center
 
 
-# .white[Just like purrr ... &lt;br&gt; 🐱] 
+# .white[Purrr your way ... &lt;br&gt; 🐱] 
 
 
 ---
