@@ -1408,7 +1408,7 @@ class: right, middle
 
 [`r icons::fontawesome("envelope")` edgar.treischl@isb.bayern.de](mailto:edgar.treischl@isb.bayern.de)
 
-[`r icons::fontawesome("file-pdf")` Slides](r_programming_R.pdf)
+[`r icons::fontawesome("file-pdf")` Slides](https://github.com/edgar-treischl/slidesProgramming/blob/main/r_programming.pdf)
 
 
 
