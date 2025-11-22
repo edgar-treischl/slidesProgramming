@@ -99,6 +99,7 @@ cat(readLines("github-corner.html"), sep = "\n")
 
 .black[Last update: `r Sys.Date()`]
 
+
 .footnote.slide-footer[
   Press `r emoji::emoji("o")` or `r emoji::emoji("arrow_right")` to navigate
 ]
@@ -1401,12 +1402,14 @@ class: right, middle
 <img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/77931249?s=400&u=eaf1d0871b643dd32cc0ff9f777edef28e6569a8&v=4" width="150px"/>
 
 
-
 [`r icons::fontawesome("rocket")` www.edgar-treischl.de](https://www.edgar-treischl.de)
 
 [`r icons::fontawesome("github")` edgar-treischl](https://github.com/edgar-treischl)
 
 [`r icons::fontawesome("envelope")` edgar.treischl@isb.bayern.de](mailto:edgar.treischl@isb.bayern.de)
+
+[`r icons::fontawesome("file-pdf")` Slides](r_programming_R.pdf)
+
 
 
 ---
