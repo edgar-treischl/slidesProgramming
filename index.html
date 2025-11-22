@@ -77,7 +77,7 @@ class: left, middle, title-slide
 
 ### &lt;a href="http://www.edgar-treischl.de" target="_blank"&gt;Dr. Edgar J. Treischl&lt;/a&gt;
 
-.black[Last update: 2025-11-17]
+.black[Last update: 2025-11-22]
 
 .footnote.slide-footer[
   Press ⭕ or ➡️ to navigate
@@ -298,7 +298,7 @@ randomize(x = c(3, 2, 1, 5, 8, 12, 1))
 ```
 
 ```
-## [1] 12
+## [1] 2
 ```
 
 #### Snippet your way, in RStudio, type: 
@@ -630,6 +630,7 @@ squares &lt;- numeric(5)
 for(i in 1:5) {
   squares[i] &lt;- i^2
 }
+
 squares
 ```
 
@@ -1190,6 +1191,7 @@ class(plots)
 
 When iterating over many elements, not every operation will go smoothly — some columns might be non-numeric, a plot might fail to render, or a transformation could throw an error.
 
+
 ---
 background-image: url("images/cartoon.gif")
 background-size: cover
@@ -1197,6 +1199,146 @@ class: bottom, center
 
 
 # .white[Purrr and friends to slay the 🐉] 
+
+
+---
+background-image: url(https://dplyr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## dplyr::across
+
+.pull-left[
+
+Across allows you to apply one or more functions to multiple columns inside `mutate`, `summarise`, `filter`, etc.
+
+- `.cols`: which columns to target (by name, tidyselect helpers, or predicates)
+- `.fns`: the function(s) to apply (formula: `~ .x`, lambda: `\(x) x + 1`, or a list of functions)
+- `.names`: optional names for new columns
+
+
+
+``` r
+# Basic syntax
+across(.cols, .fns, ..., .names = NULL)
+```
+
+#### 👉 Think of it as **map over columns** — the *column-wise equivalent* of `map()`.
+
+]
+
+.pull-right[
+
+
+
+``` r
+# Neah ....
+mtcars |&gt; summarise(
+  mpg = mean(mpg),
+  cyl = mean(cyl),
+  disp = mean(disp)
+  )
+```
+
+```
+##        mpg    cyl     disp
+## 1 20.09062 6.1875 230.7219
+```
+
+``` r
+# Yah ...
+mtcars |&gt; summarise(
+  across(c(mpg, cyl, disp), mean)
+)
+```
+
+```
+##        mpg    cyl     disp
+## 1 20.09062 6.1875 230.7219
+```
+
+
+]
+
+
+
+
+---
+background-image: url(https://dplyr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## Across in Action
+
+.pull-left[
+
+
+#### 🔍 Where ...
+
+allows you to select columns based on their type (`is.numeric`, `is.character`, `is.Date`, etc.)
+
+
+
+``` r
+summarise(mtcars,
+    across(where(is.numeric), mean)
+  )
+```
+
+```
+##        mpg    cyl     disp       hp     drat      wt     qsec     vs      am
+## 1 20.09062 6.1875 230.7219 146.6875 3.596563 3.21725 17.84875 0.4375 0.40625
+##     gear   carb
+## 1 3.6875 2.8125
+```
+
+
+👉 You can select columns using other **tidyselect** helpers, such as: `starts_with`, `ends_with`, `contains`, `matches` `everything`.
+
+
+
+
+
+]
+
+
+.pull-right[
+
+#### 📝 Contains ...
+
+... selects columns whose names include a string; `matches` selects columns whose names match a regex.
+
+
+
+
+``` r
+summarise(mtcars,
+    across(contains("m"), mean)
+  )
+```
+
+```
+##        mpg      am
+## 1 20.09062 0.40625
+```
+
+
+#### 🧩 Matches
+
+
+
+``` r
+ summarise(mtcars,
+    across(matches("^m"), mean)
+  )
+```
+
+```
+##        mpg
+## 1 20.09062
+```
+
+
+
+]
 
 
 ---

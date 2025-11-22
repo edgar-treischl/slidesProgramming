@@ -1013,6 +1013,7 @@ class(plots)
 
 When iterating over many elements, not every operation will go smoothly — some columns might be non-numeric, a plot might fail to render, or a transformation could throw an error.
 
+
 ---
 background-image: url("images/cartoon.gif")
 background-size: cover
@@ -1020,6 +1021,113 @@ class: bottom, center
 
 
 # .white[Purrr and friends to slay the `r emoji::emoji("dragon")`] 
+
+
+---
+background-image: url(https://dplyr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## dplyr::across
+
+.pull-left[
+
+Across allows you to apply one or more functions to multiple columns inside `mutate`, `summarise`, `filter`, etc.
+
+- `.cols`: which columns to target (by name, tidyselect helpers, or predicates)
+- `.fns`: the function(s) to apply (formula: `~ .x`, lambda: `\(x) x + 1`, or a list of functions)
+- `.names`: optional names for new columns
+
+
+```{r, eval=FALSE}
+# Basic syntax
+across(.cols, .fns, ..., .names = NULL)
+```
+
+#### `r emoji::emoji("point_right")` Think of it as **map over columns** — the *column-wise equivalent* of `map()`.
+
+]
+
+.pull-right[
+
+
+```{r}
+# Neah ....
+mtcars |> summarise(
+  mpg = mean(mpg),
+  cyl = mean(cyl),
+  disp = mean(disp)
+  )
+
+# Yah ...
+mtcars |> summarise(
+  across(c(mpg, cyl, disp), mean)
+)
+
+```
+
+
+]
+
+
+
+
+---
+background-image: url(https://dplyr.tidyverse.org/logo.png)
+background-position: 90% 5%
+background-size: 8%
+## Across in Action
+
+.pull-left[
+
+
+#### `r emoji::emoji("mag")` Where ...
+
+allows you to select columns based on their type (`is.numeric`, `is.character`, `is.Date`, etc.)
+
+
+```{r}
+summarise(mtcars,
+    across(where(is.numeric), mean)
+  )
+```
+
+
+`r emoji::emoji("point_right")` You can select columns using other **tidyselect** helpers, such as: `starts_with`, `ends_with`, `contains`, `matches` `everything`.
+
+
+
+
+
+]
+
+
+.pull-right[
+
+#### `r emoji::emoji("memo")` Contains ...
+
+... selects columns whose names include a string; `matches` selects columns whose names match a regex.
+
+
+
+```{r}
+summarise(mtcars,
+    across(contains("m"), mean)
+  )
+```
+
+
+#### `r emoji::emoji("jigsaw")` Matches
+
+
+```{r}
+ summarise(mtcars,
+    across(matches("^m"), mean)
+  )
+```
+
+
+
+]
 
 
 ---
